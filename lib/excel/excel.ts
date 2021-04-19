@@ -58,12 +58,14 @@ export namespace Excel {
                 stream.end();
 
                 switch (entry.name) {
+                    case '/docProps/app.xml':
                     case 'docProps/app.xml':
                         const xmlApp = new XmlApp();
                         await xmlApp.parseStream(stream);
                         Object.assign(this._data.meta, xmlApp.meta);
                         break;
 
+                    case '/docProps/core.xml':
                     case 'docProps/core.xml':
                         const xmlCore = new XmlCore();
                         await xmlCore.parseStream(stream);
