@@ -14,7 +14,7 @@ export namespace Excel {
 
         constructor(options: any = {}) {
             this._data = {
-                meta : {},
+                meta: {},
                 worksheets: [],
             }
         }
@@ -48,7 +48,13 @@ export namespace Excel {
 
                 const content = await entry.async('string');
                 let stream = new PassThrough({ readableObjectMode: true, writableObjectMode: true });
-                stream.write(content);
+
+                // Default highWaterMark is 16 KB on most environments. 
+                // Defining 10KB here to avoid backpressure in case of large XMLs.
+                const chunkSize = 10 * 1024;
+                for (let i = 0; i < content.length; i += chunkSize) {
+                    stream.write(content.substring(i, i+chunkSize));
+                }
                 stream.end();
 
                 switch (entry.name) {
