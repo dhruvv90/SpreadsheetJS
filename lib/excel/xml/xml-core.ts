@@ -1,11 +1,11 @@
-import { KeyValue, KeyValueGeneric } from '../utils';
+import { KeyValue } from '../utils';
 import { XmlBase } from './base';
-import { XmlGeneric, XmlGenericDate, XmlGenericText } from './generic';
+import { XmlGenericDate, XmlGenericText } from './generic';
 
 
 export class XmlCore extends XmlBase {
-    private _nodes: KeyValue<XmlGeneric>;
-    private _parser: XmlGeneric;
+    private _nodes: KeyValue<XmlBase>;
+    private _parser: XmlBase;
 
 
     constructor() {

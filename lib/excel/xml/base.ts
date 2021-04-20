@@ -1,8 +1,8 @@
 import { Readable } from 'readable-stream';
-import { KeyValue, parseSax } from '../utils';
+import { KeyValueGeneric, parseSax } from '../utils';
 
 export class XmlBase {
-    public meta: any = {}
+    public meta: KeyValueGeneric = {}
 
     public parseOpen(node) { }
     public parseClose(node) { }

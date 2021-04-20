@@ -1,21 +1,6 @@
-import { KeyValueGeneric } from '../utils';
 import { XmlBase } from './base';
 
-
-export class XmlGeneric extends XmlBase {
-    public meta: {
-        attributes: KeyValueGeneric;
-        tag?: string;
-        value?: any;
-    }
-
-    constructor() {
-        super();
-        this.meta.attributes = {};
-    }
-}
-
-export class XmlGenericText extends XmlGeneric {
+export class XmlGenericText extends XmlBase {
 
     constructor(tag: string) {
         super();
@@ -37,7 +22,7 @@ export class XmlGenericText extends XmlGeneric {
     }
 }
 
-export class XmlGenericDate extends XmlGeneric {
+export class XmlGenericDate extends XmlBase {
 
     constructor(tag: string) {
         super();
