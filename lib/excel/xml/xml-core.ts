@@ -1,25 +1,30 @@
-import { KeyValue } from '../utils';
+import { KeyValue, KeyValueGeneric } from '../utils';
 import { XmlBase } from './base';
-import { XmlGenericDate, XmlGenericText } from './generic';
+import { XmlUnit, XmlValueType as Xtype } from './generic';
 
 
 export class XmlCore extends XmlBase {
-    private _nodes: KeyValue<XmlBase>;
+    private _nodes: KeyValue<XmlUnit>;
     private _parser: XmlBase;
+    private _data: KeyValueGeneric;
 
+    public get data(){
+        return this._data;
+    }
 
     constructor() {
         super();
+        this._data = {};
         this._nodes = {
-            'dcterms:created': new XmlGenericDate('dcterms:created'),
-            'dc:creator': new XmlGenericText('dc:creator'),
-            'dc:description' : new XmlGenericText('dc:description'),
-            'dc:language': new XmlGenericText('dc:language'),
-            'cp:lastModifiedBy': new XmlGenericText('cp:lastModifiedBy'),
-            'dcterms:modified': new XmlGenericDate('dcterms:modified'),
-            'cp:revision': new XmlGenericText('cp:revision'),
-            'dc:subject': new XmlGenericText('dc:subject'),
-            'dc:title': new XmlGenericText('dc:title'),
+            'dcterms:created': new XmlUnit('dcterms:created', Xtype.DATETIME),
+            'dc:creator': new XmlUnit('dc:creator'),
+            'dc:description' : new XmlUnit('dc:description'),
+            'dc:language': new XmlUnit('dc:language'),
+            'cp:lastModifiedBy': new XmlUnit('cp:lastModifiedBy'),
+            'dcterms:modified': new XmlUnit('dcterms:modified', Xtype.DATETIME),
+            'cp:revision': new XmlUnit('cp:revision'),
+            'dc:subject': new XmlUnit('dc:subject'),
+            'dc:title': new XmlUnit('dc:title'),
         }
     }
 
@@ -39,17 +44,17 @@ export class XmlCore extends XmlBase {
         switch (node.name) {
             case 'cp:coreProperties':
                 const meta = {
-                    created :this._nodes['dcterms:created'].meta.value,
-                    createdBy: this._nodes['dc:creator'].meta.value,
-                    description: this._nodes['dc:description'].meta.value,
-                    language: this._nodes['dc:language'].meta.value,
-                    lastModifiedBy: this._nodes['cp:lastModifiedBy'].meta.value,
-                    modified: this._nodes['dcterms:modified'].meta.value,
-                    revision: this._nodes['cp:revision'].meta.value,
-                    subject: this._nodes['dc:subject'].meta.value,
-                    title: this._nodes['dc:title'].meta.value,
+                    created :this._nodes['dcterms:created'].value,
+                    createdBy: this._nodes['dc:creator'].value,
+                    description: this._nodes['dc:description'].value,
+                    language: this._nodes['dc:language'].value,
+                    lastModifiedBy: this._nodes['cp:lastModifiedBy'].value,
+                    modified: this._nodes['dcterms:modified'].value,
+                    revision: this._nodes['cp:revision'].value,
+                    subject: this._nodes['dc:subject'].value,
+                    title: this._nodes['dc:title'].value,
                 }
-                Object.assign(this.meta, meta);
+                Object.assign(this._data, meta);
                 break;
 
             default:

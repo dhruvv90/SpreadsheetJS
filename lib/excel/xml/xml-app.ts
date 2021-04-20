@@ -1,17 +1,22 @@
-import { KeyValue } from '../utils';
+import { KeyValue, KeyValueGeneric } from '../utils';
 import { XmlBase } from './base';
-import { XmlGenericText } from './generic';
+import { XmlUnit } from './generic';
 
 
 export class XmlApp extends XmlBase {
-    private _nodes: KeyValue<XmlBase>;
+    private _nodes: KeyValue<XmlUnit>;
     private _parser: XmlBase;
+    private _data: KeyValueGeneric;
 
+    public get data(){
+        return this._data;
+    }
 
     constructor() {
         super();
+        this._data = {};
         this._nodes = {
-            'Application': new XmlGenericText('Application'),
+            'Application': new XmlUnit('Application'),
         }
     }
 
@@ -30,10 +35,10 @@ export class XmlApp extends XmlBase {
 
         switch (node.name) {
             case 'Properties':
-                const meta = {
-                    application: this._nodes['Application'].meta.value,
-                }
-                Object.assign(this.meta, meta);
+                const data = {
+                    application: this._nodes['Application'].value,
+                };
+                Object.assign(this._data, data);
                 break;
 
             default:
