@@ -1,6 +1,6 @@
 import { KeyValue, KeyValueGeneric } from '../utils';
 import { XmlBase } from './base';
-import { XmlUnit } from './generic';
+import { XmlUnit } from './xml-unit';
 
 
 export class XmlApp extends XmlBase {

@@ -1,6 +1,6 @@
 import { KeyValue, KeyValueGeneric } from '../utils';
 import { XmlBase } from './base';
-import { XmlUnit, XmlValueType as Xtype } from './generic';
+import { XmlUnit, XmlValueType as Xtype } from './xml-unit';
 
 
 export class XmlCore extends XmlBase {
