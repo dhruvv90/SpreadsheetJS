@@ -6,6 +6,12 @@ export enum XmlValueType {
     DATETIME = 'DATETIME',
 }
 
+/**
+ * Basic/simple XML unit, of which every XML file is composed of.
+ * * Has either no value or a text value
+ * * can have attributes
+ * * Does not have any nested inner XML tags
+ */
 export class XmlUnit extends XmlBase {
 
     private _tag: string;
