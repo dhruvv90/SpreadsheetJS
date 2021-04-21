@@ -31,6 +31,7 @@ export namespace Excel {
             }
             catch (error) {
                 stream.close();
+                console.log(error);
                 throw error;
             }
         }
