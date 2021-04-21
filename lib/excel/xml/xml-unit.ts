@@ -1,5 +1,6 @@
 import { KeyValue, KeyValueGeneric } from '../utils';
 import { XmlBase } from './base';
+import * as assert from 'assert';
 
 export enum XmlValueType {
     TEXT = 'TEXT',
@@ -14,26 +15,28 @@ export enum XmlValueType {
  */
 export class XmlUnit extends XmlBase {
 
-    private _tag: string;
     private _type: XmlValueType;
-    private _attributes: KeyValueGeneric;
     private _parsingMap: KeyValue<Function>
 
-    protected _value: string;
-
     public get value() {
-        return this._value;
+        return this._data.value;
     }
 
     public get attributes() {
-        return this._attributes;
+        return this._data.attributes;
     }
 
-    constructor(tag: string, type: XmlValueType =  XmlValueType.TEXT) {
-        super();
-        this._type = type;
+    constructor(tag: string, type: XmlValueType = XmlValueType.TEXT) {
+        super(tag);
+
+        assert(!!tag, 'tag must be present');
         this._tag = tag;
-        this._attributes = {};
+        
+        this._type = type;
+        this._data = {
+            attributes: {},
+            value: undefined
+        }
 
         if (!(type in XmlValueType)) {
             throw new Error(`Illegal Construction- type : ${type} must be in ${Object.keys(XmlValueType).join(', ')}`);
@@ -48,7 +51,7 @@ export class XmlUnit extends XmlBase {
     public parseOpen(node) {
         switch (node.name) {
             case this._tag:
-                Object.assign(this._attributes, node.attributes);
+                this._data.attributes = node.attributes;
                 break;
             default:
                 throw new Error(`Unable to parse open tag for node : ${node.name}. XmlUnit expected!`);
@@ -63,10 +66,9 @@ export class XmlUnit extends XmlBase {
             default:
                 throw new Error(`Unable to parse close tag for node : ${node.name}. XmlUnit expected!`);
         }
-
     }
 
     public parseText(value: string) {
-        this._value = this._parsingMap[this._type](value);
+        this._data.value = this._parsingMap[this._type](value);
     }
 }
