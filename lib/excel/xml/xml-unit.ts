@@ -1,4 +1,4 @@
-import { KeyValue, KeyValueGeneric } from '../utils';
+import { KeyValue } from '../utils';
 import { XmlBase } from './base';
 import * as assert from 'assert';
 
@@ -31,7 +31,8 @@ export class XmlUnit extends XmlBase {
 
         assert(!!tag, 'tag must be present');
         this._tag = tag;
-        
+
+
         this._type = type;
         this._data = {
             attributes: {},
@@ -70,5 +71,9 @@ export class XmlUnit extends XmlBase {
 
     public parseText(value: string) {
         this._data.value = this._parsingMap[this._type](value);
+    }
+
+    protected populateData(): void {
+        throw new Error('Illegal method call. Not allowed');
     }
 }

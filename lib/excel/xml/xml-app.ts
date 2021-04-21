@@ -1,4 +1,4 @@
-import { KeyValue, KeyValueGeneric } from '../utils';
+import { KeyValueGeneric } from '../utils';
 import { XmlBase } from './base';
 import { XmlUnit } from './xml-unit';
 
@@ -17,8 +17,8 @@ export class XmlApp extends XmlBase {
         return this._data;
     }
 
-    protected populateData(): KeyValueGeneric {
-        return {
+    protected populateData() {
+        this._data = {
             application: this._nodes['Application'].value,
         }
     }

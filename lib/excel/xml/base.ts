@@ -3,7 +3,7 @@ import { Readable } from 'readable-stream';
 import { KeyValue, KeyValueGeneric, parseSax } from '../utils';
 import { XmlUnit } from './xml-unit';
 
-export class XmlBase {
+export abstract class XmlBase {
 
     protected _nodes: KeyValue<XmlUnit>;
     protected _parser: XmlBase;
@@ -16,9 +16,11 @@ export class XmlBase {
         this._tag = tag;
     }
 
-    protected populateData(): KeyValueGeneric {
-        return {};
-    }
+    /**
+     * This should be used to populate _data
+     */
+    protected abstract populateData(): void;
+
 
     public parseOpen(node) {
         if (node.name in this._nodes) {
@@ -36,7 +38,7 @@ export class XmlBase {
         }
 
         if (node.name === this._tag) {
-            this._data = this.populateData();
+            this.populateData();
         }
     }
 

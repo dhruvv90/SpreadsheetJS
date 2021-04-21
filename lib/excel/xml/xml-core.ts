@@ -1,4 +1,3 @@
-import { KeyValue, KeyValueGeneric } from '../utils';
 import { XmlBase } from './base';
 import { XmlUnit, XmlValueType as Xtype } from './xml-unit';
 
@@ -26,7 +25,7 @@ export class XmlCore extends XmlBase {
     }
 
     protected populateData() {
-        return {
+        this._data = {
             created: this._nodes['dcterms:created'].value,
             createdBy: this._nodes['dc:creator'].value,
             description: this._nodes['dc:description'].value,
