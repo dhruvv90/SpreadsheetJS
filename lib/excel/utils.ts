@@ -5,6 +5,21 @@ import { Readable } from 'readable-stream';
 export type KeyValue<T> = Record<string, T>;
 export type KeyValueGeneric = KeyValue<any>;
 
+export type XmlDataType = {
+    value?: string;
+    [key: string]: any;
+}
+
+export type XMLNodeType = {
+    name: string;
+    attributes?: KeyValueGeneric
+}
+
+export enum XmlValueType {
+    TEXT = 'TEXT',
+    DATETIME = 'DATETIME',
+}
+
 
 export const parseSax = async function* (stream: Readable) {
     const parser = new saxes.SaxesParser();

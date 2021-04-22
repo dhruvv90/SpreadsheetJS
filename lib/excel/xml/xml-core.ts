@@ -1,40 +1,40 @@
-import { XmlBase } from './base';
-import { XmlUnit, XmlValueType as Xtype } from './xml-unit';
+import { XMLNodeType, XmlValueType as Xtype } from '../utils';
+import { ParseableXmlUnit, BaseXmlUnit } from './base';
 
-
-export class XmlCore extends XmlBase {
+export class XmlCore extends ParseableXmlUnit {
 
     constructor() {
-        super();
-        this._tag = 'cp:coreProperties';
+        super('cp:coreProperties');
         this._nodes = {
-            'dcterms:created': new XmlUnit('dcterms:created', Xtype.DATETIME),
-            'dc:creator': new XmlUnit('dc:creator'),
-            'dc:description': new XmlUnit('dc:description'),
-            'dc:language': new XmlUnit('dc:language'),
-            'cp:lastModifiedBy': new XmlUnit('cp:lastModifiedBy'),
-            'dcterms:modified': new XmlUnit('dcterms:modified', Xtype.DATETIME),
-            'cp:revision': new XmlUnit('cp:revision'),
-            'dc:subject': new XmlUnit('dc:subject'),
-            'dc:title': new XmlUnit('dc:title'),
+            'dcterms:created': new BaseXmlUnit('dcterms:created', Xtype.DATETIME),
+            'dc:creator': new BaseXmlUnit('dc:creator'),
+            'dc:description': new BaseXmlUnit('dc:description'),
+            'dc:language': new BaseXmlUnit('dc:language'),
+            'cp:lastModifiedBy': new BaseXmlUnit('cp:lastModifiedBy'),
+            'dcterms:modified': new BaseXmlUnit('dcterms:modified', Xtype.DATETIME),
+            'cp:revision': new BaseXmlUnit('cp:revision'),
+            'dc:subject': new BaseXmlUnit('dc:subject'),
+            'dc:title': new BaseXmlUnit('dc:title'),
         }
     }
 
-    public get data() {
-        return this._data;
+    protected processOpen(node: XMLNodeType) {
+
+
     }
 
-    protected populateData() {
-        this._data = {
-            created: this._nodes['dcterms:created'].value,
-            createdBy: this._nodes['dc:creator'].value,
-            description: this._nodes['dc:description'].value,
-            language: this._nodes['dc:language'].value,
-            lastModifiedBy: this._nodes['cp:lastModifiedBy'].value,
-            modified: this._nodes['dcterms:modified'].value,
-            revision: this._nodes['cp:revision'].value,
-            subject: this._nodes['dc:subject'].value,
-            title: this._nodes['dc:title'].value,
-        }
+
+    protected processClose() {
+        Object.assign(this._data, {
+            created: this._nodes['dcterms:created'].data.value,
+            createdBy: this._nodes['dc:creator'].data.value,
+            description: this._nodes['dc:description'].data.value,
+            language: this._nodes['dc:language'].data.value,
+            lastModifiedBy: this._nodes['cp:lastModifiedBy'].data.value,
+            modified: this._nodes['dcterms:modified'].data.value,
+            revision: this._nodes['cp:revision'].data.value,
+            subject: this._nodes['dc:subject'].data.value,
+            title: this._nodes['dc:title'].data.value,
+        });
     }
 }

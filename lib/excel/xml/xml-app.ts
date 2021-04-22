@@ -1,25 +1,21 @@
-import { KeyValueGeneric } from '../utils';
-import { XmlBase } from './base';
-import { XmlUnit } from './xml-unit';
+import { KeyValueGeneric, XMLNodeType } from '../utils';
+import { BaseXmlUnit, ParseableXmlUnit } from './base';
 
 
-export class XmlApp extends XmlBase {
+export class XmlApp extends ParseableXmlUnit {
 
     constructor() {
-        super();
-        this._tag = 'Properties';
+        super('Properties');
         this._nodes = {
-            'Application': new XmlUnit('Application'),
+            'Application': new BaseXmlUnit('Application'),
         }
     }
 
-    public get data(): KeyValueGeneric {
-        return this._data;
+    protected processOpen(node: XMLNodeType): void {
+        
     }
 
-    protected populateData() {
-        this._data = {
-            application: this._nodes['Application'].value,
-        }
+    protected processClose(): void {
+        this._data.application =  this._nodes['Application'].data.value;
     }
 }
