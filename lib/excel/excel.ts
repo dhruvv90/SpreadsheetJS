@@ -4,6 +4,7 @@ import { Readable, PassThrough } from 'readable-stream';
 import { KeyValueGeneric } from './utils';
 import { XmlApp } from './xml/xml-app';
 import { XmlCore } from './xml/xml-core';
+import { XmlSharedStrings } from './xml/xml-shared-strings';
 
 
 export namespace Excel {
@@ -16,6 +17,7 @@ export namespace Excel {
             this._data = {
                 meta: {},
                 worksheets: [],
+                sharedStrings: {},
             }
         }
 
@@ -71,6 +73,13 @@ export namespace Excel {
                         const xmlCore = new XmlCore();
                         await xmlCore.parseStream(stream);
                         Object.assign(this._data.meta, xmlCore.data);
+                        break;
+                    
+                    case '/xl/sharedStrings.xml':
+                    case 'xl/sharedStrings.xml':
+                        const xmlSharedStrings = new XmlSharedStrings();
+                        await xmlSharedStrings.parseStream(stream);
+                        Object.assign(this._data.sharedStrings, xmlSharedStrings.data);
                         break;
 
                     default:
