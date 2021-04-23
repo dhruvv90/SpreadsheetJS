@@ -21,14 +21,38 @@ export class XmlSharedStrings extends ParseableXmlUnit {
         });
     }
 
+    public parseOpen(node: XMLNodeType) {
+        if (node.name === this._tag) {
+            this.processOpen(node);
+        }
+
+        if(node.name === 'si'){
+            this.data.temp = [];
+        }
+
+        if (node.name in this._nodes) {
+            this._parser = this._nodes[node.name];
+            this._parser.parseOpen(node);
+        }
+    }
+
+    public parseText(text: string) {
+        if (this._parser) {
+            this._parser.parseText(text);
+        }
+    }
+
     public parseClose(node) {
         if (this._parser) {
+            if(this._parser.tag === 't'){
+                this._data.temp.push(this._parser.data.value)
+            }
             this._parser.parseClose(node);
             this._parser = undefined;
         }
 
         if (node.name === 'si') {
-            const text = this._nodes['t'].data.value;
+            const text = this._data.temp.join('');
             this._sharedStrings.push(text);
         }
 
