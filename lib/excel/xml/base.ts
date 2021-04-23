@@ -69,8 +69,6 @@ export abstract class ParseableXmlUnit {
     }
 
     public parseClose(node) {
-        assert(this._tag, 'Tag is missing');
-
         if (this._parser) {
             this._parser.parseClose(node);
             this._parser = undefined;
