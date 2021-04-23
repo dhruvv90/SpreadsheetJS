@@ -28,6 +28,10 @@ export abstract class ParseableXmlUnit {
         return this._data;
     }
 
+    public get tag(){
+        return this._tag;
+    }
+
 
     constructor(tag: string) {
         assert(tag, `Illegal ParseableXmlUnit construction. 'tag' must be present`);
