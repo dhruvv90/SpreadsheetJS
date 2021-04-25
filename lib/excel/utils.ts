@@ -15,6 +15,18 @@ export type XMLNodeType = {
     attributes?: KeyValueGeneric
 }
 
+export enum SheetState {
+    HIDDEN = 'hidden',
+    VISIBLE = 'visible'
+}
+
+export type SheetInfo = {
+    sheetId: number;
+    rId: string;
+    name: string;
+    state: SheetState;
+}
+
 
 
 export const parseSax = async function* (stream: Readable) {

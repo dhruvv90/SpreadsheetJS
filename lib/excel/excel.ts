@@ -5,6 +5,7 @@ import { KeyValueGeneric } from './utils';
 import { XmlApp } from './xml/xml-app';
 import { XmlCore } from './xml/xml-core';
 import { XmlSharedStrings } from './xml/xml-shared-strings';
+import { XmlWorkbook } from './xml/xml-workbook';
 
 
 export namespace Excel {
@@ -18,6 +19,7 @@ export namespace Excel {
                 meta: {},
                 worksheets: [],
                 sharedStrings: {},
+                sheetsInfo: []
             }
         }
 
@@ -85,6 +87,13 @@ export namespace Excel {
                             ssItems: xmlSharedStrings.ssItems,
                             count: xmlSharedStrings.count
                         });
+                        break;
+
+                    case '/xl/workbook.xml':
+                    case 'xl/workbook.xml':
+                        const xmlWorkbook = new XmlWorkbook();
+                        await xmlWorkbook.parseStream(stream);
+                        this._data.sheetsInfo = xmlWorkbook.sheetsInfo;
                         break;
 
                     default:
