@@ -27,6 +27,16 @@ export type SheetInfo = {
     state: SheetState;
 }
 
+export enum CellDataType {
+    BOOLEAN = 'b',
+    DATE = 'd',
+    ERROR = 'e',
+    INLINE_STRING = 'inlineStr',
+    NUMBER = 'n',
+    SHARED_STRING = 's',
+    STRING = 'str'
+}
+
 
 
 export const parseSax = async function* (stream: Readable) {
@@ -51,4 +61,20 @@ export const parseSax = async function* (stream: Readable) {
     }
 }
 
+/**
+ * can process these forms - case insensitive :  'true', 't'. All others/undef is false
+ */
+export const stringToBool = function (s: string, undefIsFalse = false): boolean {
+    if (!s) return false;
+
+    const truthyList = ['true', 't'];
+    const comparator = s.toLowerCase();
+    if (truthyList.includes(comparator)) return true;
+
+    return false;
+}
+
+export const isValidDate = function (d: Date) {
+    return !!d && !isNaN(d.getTime())
+}
 

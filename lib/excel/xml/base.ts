@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { Readable } from 'readable-stream';
-import { KeyValue, KeyValueGeneric, parseSax, XmlDataType, XMLNodeType } from '../utils';
+import { isValidDate, KeyValue, KeyValueGeneric, parseSax, XmlDataType, XMLNodeType } from '../utils';
 
 /** Every XML Unit which needs to be parsed must extend this */
 export abstract class ParseableXmlUnit {
@@ -144,6 +144,9 @@ export class XmlUnitString extends ParseableXmlUnit {
             this.value = (this.value || '').concat(value);
         }
         else {
+            if(typeof value !== 'string'){
+                throw new Error(`Invalid String : ${value}`);
+            }
             this.value = value;
         }
     }
@@ -169,7 +172,11 @@ export class XmlUnitDate extends ParseableXmlUnit {
     }
 
     public parseText(value: string) {
-        this.value = new Date(value);
+        const d = new Date(value);
+        if(!isValidDate(d)){
+            throw new Error(`Invalid date string : ${value}`);
+        }
+        this.value = d;
     }
 
     protected onOpen(): void {
@@ -181,6 +188,28 @@ export class XmlUnitDate extends ParseableXmlUnit {
     }
 }
 
+
+export class XmlUnitNumber extends ParseableXmlUnit {
+
+    constructor(tag: string) {
+        super(tag);
+    }
+
+    public parseText(value: string) {
+        const n = Number(value);
+        if(isNaN(n)){
+            throw new Error(`Invalid Number string : ${value}`);
+        }
+    }
+
+    protected onOpen(): void {
+
+    }
+
+    protected onClose(): void {
+
+    }
+}
 
 
 
