@@ -83,8 +83,7 @@ export namespace Excel {
                         await xmlSharedStrings.parseStream(stream);
                         Object.assign(this._data.sharedStrings, {
                             ssItems: xmlSharedStrings.ssItems,
-                            count: xmlSharedStrings.count,
-                            uniqueCount: xmlSharedStrings.uniqueCount
+                            count: xmlSharedStrings.count
                         });
                         break;
 

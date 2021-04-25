@@ -24,11 +24,11 @@ export abstract class ParseableXmlUnit {
     protected _tag: string;
 
 
-    public get value(){
+    public get value() {
         return this._data.value;
     }
 
-    public set value(value: any){
+    public set value(value: any) {
         this._data.value = value
     }
 
@@ -132,12 +132,20 @@ export abstract class ParseableXmlUnit {
  */
 export class XmlUnitString extends ParseableXmlUnit {
 
-    constructor(tag: string) {
+    private _concat: boolean;
+
+    constructor(tag: string, options: KeyValueGeneric = {}) {
         super(tag);
+        this._concat = options.concat;
     }
 
     public parseText(value: string) {
-        this.value = value;
+        if (this._concat) {
+            this.value = (this.value || '').concat(value);
+        }
+        else {
+            this.value = value;
+        }
     }
 
     protected onOpen(node: XMLNodeType): void {
@@ -146,6 +154,10 @@ export class XmlUnitString extends ParseableXmlUnit {
 
     protected onClose(): void {
 
+    }
+
+    public resetValue() {
+        this.value = '';
     }
 }
 

@@ -34,7 +34,7 @@ export class XmlCore extends ParseableXmlUnit {
             language: this._nodes['dc:language'].value,
             lastModifiedBy: this._nodes['cp:lastModifiedBy'].value,
             modified: this._nodes['dcterms:modified'].value,
-            revision: this._nodes['cp:revision'].value,
+            revision: Number(this._nodes['cp:revision'].value),
             subject: this._nodes['dc:subject'].value,
             title: this._nodes['dc:title'].value,
         });
