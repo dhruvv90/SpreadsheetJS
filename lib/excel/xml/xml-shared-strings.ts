@@ -18,7 +18,10 @@ class XmlSharedStringItems extends ParseableXmlUnit {
     }
 
     protected onClose(): void {
-        this.ssItems.push(this._nodes['t'].value);
+        const tNode = this._nodes['t'];
+        this.ssItems.push(tNode.value);
+        
+        tNode.resetValue();
     }
 
 }

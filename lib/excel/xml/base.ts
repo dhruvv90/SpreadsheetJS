@@ -25,11 +25,15 @@ export abstract class ParseableXmlUnit {
 
 
     public get value() {
-        return this._data.value;
+        return this._data.values.join('');
     }
 
-    public set value(value: any){
-        this._data.value = value;
+    public resetValue(){
+        this._data.values = [];
+    }
+
+    protected addValue(value: any){
+        this._data.values.push(value);
     }
 
     public get attributes(){
@@ -46,7 +50,10 @@ export abstract class ParseableXmlUnit {
         this._tag = tag;
 
         this._nodes = {};
-        this._data = {};
+        this._data = {
+            values: [],
+            attributes : {}
+        }
     }
 
     /**
@@ -131,7 +138,7 @@ export abstract class ParseableXmlUnit {
 export class BaseXmlUnit extends ParseableXmlUnit {
 
     private _type: XmlValueType;
-    private _valueParser: Record<XmlValueType, Function>
+    private _valueParser: Record<XmlValueType, Function>;
 
 
     constructor(tag: string, type: XmlValueType = XmlValueType.TEXT) {
@@ -149,7 +156,8 @@ export class BaseXmlUnit extends ParseableXmlUnit {
     }
 
     public parseText(value: string) {
-        this.value = this._valueParser[this._type](value);
+        const v = this._valueParser[this._type](value);
+        this.addValue(v);
     }
 
     protected onOpen(node: XMLNodeType): void {

@@ -6,8 +6,8 @@ export type KeyValue<T> = Record<string, T>;
 export type KeyValueGeneric = KeyValue<any>;
 
 export type XmlDataType = {
-    value?: string;
-    attributes?: KeyValueGeneric;
+    values: Array<any>;
+    attributes: KeyValueGeneric;
 }
 
 export type XMLNodeType = {
