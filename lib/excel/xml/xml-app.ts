@@ -11,11 +11,11 @@ export class XmlApp extends ParseableXmlUnit {
         }
     }
 
-    protected processOpen(node: XMLNodeType): void {
+    protected onOpen(node: XMLNodeType): void {
         
     }
 
-    protected processClose(): void {
+    protected onClose(): void {
         this._data.application =  this._nodes['Application'].data.value;
     }
 }

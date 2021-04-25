@@ -12,11 +12,11 @@ class XmlSharedStringItem extends ParseableXmlUnit {
         this._data.items = [];
     }
 
-    protected processOpen(node: XMLNodeType): void {
+    protected onOpen(node: XMLNodeType): void {
 
     }
     
-    protected processClose(): void {
+    protected onClose(): void {
         this._data.items.push(this._nodes['t'].data.value);
     }
 
@@ -38,14 +38,14 @@ export class XmlSharedStrings extends ParseableXmlUnit {
         this._sharedStrings = [];
     }
 
-    protected processOpen(node: XMLNodeType): void {
+    protected onOpen(node: XMLNodeType): void {
         Object.assign(this._data, {
             uniqueCount: node.attributes.uniqueCount,
             count: node.attributes.count
         });
     }
 
-    protected processClose(): void {
+    protected onClose(): void {
         this._data.ssList = this._nodes['si'].data.items;
     }
 

@@ -18,13 +18,13 @@ export class XmlCore extends ParseableXmlUnit {
         }
     }
 
-    protected processOpen(node: XMLNodeType) {
+    protected onOpen(node: XMLNodeType) {
 
 
     }
 
 
-    protected processClose() {
+    protected onClose() {
         Object.assign(this._data, {
             created: this._nodes['dcterms:created'].data.value,
             createdBy: this._nodes['dc:creator'].data.value,
