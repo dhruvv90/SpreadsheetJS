@@ -28,7 +28,7 @@ export abstract class ParseableXmlUnit {
         return this._data;
     }
 
-    public get tag(){
+    public get tag() {
         return this._tag;
     }
 
@@ -58,15 +58,14 @@ export abstract class ParseableXmlUnit {
 
 
     public parseOpen(node: XMLNodeType) {
-        if (this._tag in this._nodes) {
-            throw new Error(`Feature not supported. Tag : ${this._tag} cannot be nested within itself`);
-        }
-
         if (node.name === this._tag) {
             this.processOpen(node);
         }
 
-        if (node.name in this._nodes) {
+        if (this._parser) {
+            this._parser.parseOpen(node);
+        }
+        else if (node.name in this._nodes) {
             this._parser = this._nodes[node.name];
             this._parser.parseOpen(node);
         }
@@ -75,9 +74,12 @@ export abstract class ParseableXmlUnit {
     public parseClose(node) {
         if (this._parser) {
             this._parser.parseClose(node);
+        }
+        
+        if (node.name in this._nodes){
             this._parser = undefined;
         }
-
+        
         if (node.name === this._tag) {
             this.processClose();
         }
