@@ -1,41 +1,39 @@
-import { XMLNodeType } from "../utils";
+import { XMLNodeType, XmlValueType } from "../utils";
 import { BaseXmlUnit, ParseableXmlUnit } from "./base";
 
 
-class XmlSharedStringItem extends ParseableXmlUnit {
+class XmlSharedStringItems extends ParseableXmlUnit {
 
-    constructor(){
+    public ssItems: Array<string> = [];
+
+    constructor() {
         super('si');
         this._nodes = {
             't': new BaseXmlUnit('t')
         }
-        this._data.items = [];
     }
 
     protected onOpen(node: XMLNodeType): void {
 
     }
-    
+
     protected onClose(): void {
-        this._data.items.push(this._nodes['t'].data.value);
+        this.ssItems.push(this._nodes['t'].data.value)
     }
 
 }
 
 export class XmlSharedStrings extends ParseableXmlUnit {
 
-    private _sharedStrings: Array<string>;
-
-    public get sharedStrings(){
-        return this._sharedStrings;
-    }
+    public ssItems: Array<string> = [];
+    public uniqueCount: number;
+    public count: number;
 
     constructor() {
         super('sst');
         this._nodes = {
-            si: new XmlSharedStringItem(),
+            'si': new XmlSharedStringItems(),
         }
-        this._sharedStrings = [];
     }
 
     protected onOpen(node: XMLNodeType): void {
@@ -45,8 +43,10 @@ export class XmlSharedStrings extends ParseableXmlUnit {
         });
     }
 
-    protected onClose(): void {
-        this._data.ssList = this._nodes['si'].data.items;
+    protected onClose() {
+        this.ssItems = (this._nodes['si'] as XmlSharedStringItems).ssItems;
+        this.uniqueCount = this._data.attributes.uniqueCount;
+        this.count = this._data.attributes.count;
     }
 
 }

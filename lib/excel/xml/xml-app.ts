@@ -4,6 +4,8 @@ import { BaseXmlUnit, ParseableXmlUnit } from './base';
 
 export class XmlApp extends ParseableXmlUnit {
 
+    public application: string;
+
     constructor() {
         super('Properties');
         this._nodes = {
@@ -16,6 +18,6 @@ export class XmlApp extends ParseableXmlUnit {
     }
 
     protected onClose(): void {
-        this._data.application =  this._nodes['Application'].data.value;
+        this.application =  this._nodes['Application'].data.value;
     }
 }

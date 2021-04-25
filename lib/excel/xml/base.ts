@@ -42,15 +42,13 @@ export abstract class ParseableXmlUnit {
     }
 
     /**
-     * Invoked during opentag event of current node. Usage:
-     * * should be used to store attributes, if required
-     * * Can be for any pre-processing before parsing starts
+     * Invoked during opentag event of current node. 
      */
     protected abstract onOpen(node: XMLNodeType): void;
 
 
     /** Invoked during closetag event of current node. Usage:
-     * * Should be used to extract required data from child nodes through _nodes
+     * * Can be used to extract required data from child nodes through _nodes
      * * Can be used for any post processing after parsing is complete 
      */
     protected abstract onClose(): void;
@@ -59,6 +57,7 @@ export abstract class ParseableXmlUnit {
 
     public parseOpen(node: XMLNodeType) {
         if (node.name === this._tag) {
+            this._data.attributes = node.attributes;
             this.onOpen(node);
         }
 
@@ -146,7 +145,7 @@ export class BaseXmlUnit extends ParseableXmlUnit {
     }
 
     protected onOpen(node: XMLNodeType): void {
-        Object.assign(this._data, node.attributes);
+
     }
 
     protected onClose(): void {

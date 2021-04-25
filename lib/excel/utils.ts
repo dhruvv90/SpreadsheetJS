@@ -7,7 +7,7 @@ export type KeyValueGeneric = KeyValue<any>;
 
 export type XmlDataType = {
     value?: string;
-    [key: string]: any;
+    attributes?: KeyValueGeneric;
 }
 
 export type XMLNodeType = {

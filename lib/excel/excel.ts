@@ -65,21 +65,27 @@ export namespace Excel {
                     case 'docProps/app.xml':
                         const xmlApp = new XmlApp();
                         await xmlApp.parseStream(stream);
-                        Object.assign(this._data.meta, xmlApp.data);
+                        Object.assign(this._data.meta, {
+                            application: xmlApp.application
+                        });
                         break;
 
                     case '/docProps/core.xml':
                     case 'docProps/core.xml':
                         const xmlCore = new XmlCore();
                         await xmlCore.parseStream(stream);
-                        Object.assign(this._data.meta, xmlCore.data);
+                        Object.assign(this._data.meta, xmlCore.metadata);
                         break;
                     
                     case '/xl/sharedStrings.xml':
                     case 'xl/sharedStrings.xml':
                         const xmlSharedStrings = new XmlSharedStrings();
                         await xmlSharedStrings.parseStream(stream);
-                        Object.assign(this._data.sharedStrings, xmlSharedStrings.data);
+                        Object.assign(this._data.sharedStrings, {
+                            ssItems: xmlSharedStrings.ssItems,
+                            count: xmlSharedStrings.count,
+                            uniqueCount: xmlSharedStrings.uniqueCount
+                        });
                         break;
 
                     default:

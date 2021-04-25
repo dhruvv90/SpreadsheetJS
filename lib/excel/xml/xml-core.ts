@@ -1,7 +1,9 @@
-import { XMLNodeType, XmlValueType as Xtype } from '../utils';
+import { KeyValueGeneric, XMLNodeType, XmlValueType as Xtype } from '../utils';
 import { ParseableXmlUnit, BaseXmlUnit } from './base';
 
 export class XmlCore extends ParseableXmlUnit {
+
+    public metadata: KeyValueGeneric = {};
 
     constructor() {
         super('cp:coreProperties');
@@ -25,7 +27,7 @@ export class XmlCore extends ParseableXmlUnit {
 
 
     protected onClose() {
-        Object.assign(this._data, {
+        Object.assign(this.metadata, {
             created: this._nodes['dcterms:created'].data.value,
             createdBy: this._nodes['dc:creator'].data.value,
             description: this._nodes['dc:description'].data.value,
