@@ -14,10 +14,10 @@ export class XmlApp extends ParseableXmlUnit {
     }
 
     protected onOpen(): void {
-        
+
     }
 
     protected onClose(): void {
-        this.application =  this._nodes['Application'].value;
+        this.application = this._nodes['Application'].value;
     }
 }
