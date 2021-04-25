@@ -18,6 +18,6 @@ export class XmlApp extends ParseableXmlUnit {
     }
 
     protected onClose(): void {
-        this.application =  this._nodes['Application'].data.value;
+        this.application =  this._nodes['Application'].value;
     }
 }

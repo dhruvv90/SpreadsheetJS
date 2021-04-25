@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { Readable } from 'readable-stream';
-import { KeyValue, parseSax, XmlDataType, XMLNodeType, XmlValueType } from '../utils';
+import { KeyValue, KeyValueGeneric, parseSax, XmlDataType, XMLNodeType, XmlValueType } from '../utils';
 
 /** Every XML Unit which needs to be parsed must extend this */
 export abstract class ParseableXmlUnit {
@@ -14,7 +14,7 @@ export abstract class ParseableXmlUnit {
 
 
     /** Stores data extracted from self + child nodes */
-    protected _data: XmlDataType;
+    private _data: XmlDataType;
 
 
     /** Represents string tag of current XML node. 
@@ -24,8 +24,16 @@ export abstract class ParseableXmlUnit {
     protected _tag: string;
 
 
-    public get data() {
-        return this._data;
+    public get value() {
+        return this._data.value;
+    }
+
+    public set value(value: any){
+        this._data.value = value;
+    }
+
+    public get attributes(){
+        return this._data.attributes;
     }
 
     public get tag() {
@@ -141,7 +149,7 @@ export class BaseXmlUnit extends ParseableXmlUnit {
     }
 
     public parseText(value: string) {
-        this._data.value = this._valueParser[this._type](value);
+        this.value = this._valueParser[this._type](value);
     }
 
     protected onOpen(node: XMLNodeType): void {

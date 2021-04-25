@@ -28,15 +28,15 @@ export class XmlCore extends ParseableXmlUnit {
 
     protected onClose() {
         Object.assign(this.metadata, {
-            created: this._nodes['dcterms:created'].data.value,
-            createdBy: this._nodes['dc:creator'].data.value,
-            description: this._nodes['dc:description'].data.value,
-            language: this._nodes['dc:language'].data.value,
-            lastModifiedBy: this._nodes['cp:lastModifiedBy'].data.value,
-            modified: this._nodes['dcterms:modified'].data.value,
-            revision: this._nodes['cp:revision'].data.value,
-            subject: this._nodes['dc:subject'].data.value,
-            title: this._nodes['dc:title'].data.value,
+            created: this._nodes['dcterms:created'].value,
+            createdBy: this._nodes['dc:creator'].value,
+            description: this._nodes['dc:description'].value,
+            language: this._nodes['dc:language'].value,
+            lastModifiedBy: this._nodes['cp:lastModifiedBy'].value,
+            modified: this._nodes['dcterms:modified'].value,
+            revision: this._nodes['cp:revision'].value,
+            subject: this._nodes['dc:subject'].value,
+            title: this._nodes['dc:title'].value,
         });
     }
 }

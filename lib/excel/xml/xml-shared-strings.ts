@@ -18,7 +18,7 @@ class XmlSharedStringItems extends ParseableXmlUnit {
     }
 
     protected onClose(): void {
-        this.ssItems.push(this._nodes['t'].data.value)
+        this.ssItems.push(this._nodes['t'].value);
     }
 
 }
@@ -37,16 +37,13 @@ export class XmlSharedStrings extends ParseableXmlUnit {
     }
 
     protected onOpen(node: XMLNodeType): void {
-        Object.assign(this._data, {
-            uniqueCount: node.attributes.uniqueCount,
-            count: node.attributes.count
-        });
+
     }
 
     protected onClose() {
         this.ssItems = (this._nodes['si'] as XmlSharedStringItems).ssItems;
-        this.uniqueCount = this._data.attributes.uniqueCount;
-        this.count = this._data.attributes.count;
+        this.uniqueCount = this.attributes.uniqueCount;
+        this.count = this.attributes.count;
     }
 
 }
