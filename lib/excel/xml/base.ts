@@ -54,7 +54,7 @@ export abstract class ParseableXmlUnit {
     /**
      * Invoked during opentag event of current node. 
      */
-    protected abstract onOpen(node: XMLNodeType): void;
+    protected abstract onOpen(): void;
 
 
     /** Invoked during closetag event of current node. Usage:
@@ -68,7 +68,7 @@ export abstract class ParseableXmlUnit {
     public parseOpen(node: XMLNodeType) {
         if (node.name === this._tag) {
             this._data.attributes = node.attributes;
-            this.onOpen(node);
+            this.onOpen();
         }
 
         if (this._parser) {
@@ -148,7 +148,7 @@ export class XmlUnitString extends ParseableXmlUnit {
         }
     }
 
-    protected onOpen(node: XMLNodeType): void {
+    protected onOpen(): void {
 
     }
 
@@ -172,7 +172,7 @@ export class XmlUnitDate extends ParseableXmlUnit {
         this.value = new Date(value);
     }
 
-    protected onOpen(node: XMLNodeType): void {
+    protected onOpen(): void {
 
     }
 

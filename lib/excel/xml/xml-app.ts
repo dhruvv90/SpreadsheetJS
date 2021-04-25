@@ -13,7 +13,7 @@ export class XmlApp extends ParseableXmlUnit {
         }
     }
 
-    protected onOpen(node: XMLNodeType): void {
+    protected onOpen(): void {
         
     }
 

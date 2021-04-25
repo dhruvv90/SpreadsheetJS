@@ -11,7 +11,7 @@ class XmlSheetInfo extends ParseableXmlUnit {
         super('sheet');
     }
 
-    protected onOpen(node: XMLNodeType): void {
+    protected onOpen(): void {
         this.sheetsInfo.push({
             name : this.attributes.name,
             sheetId: this.attributes.sheetId,
@@ -36,7 +36,7 @@ class XmlSheetsInfo extends ParseableXmlUnit {
         }
     }
 
-    protected onOpen(node: XMLNodeType): void {
+    protected onOpen(): void {
 
     }
 
@@ -57,7 +57,7 @@ export class XmlWorkbook extends ParseableXmlUnit {
         }
     }
 
-    protected onOpen(node: XMLNodeType): void {
+    protected onOpen(): void {
 
     }
 

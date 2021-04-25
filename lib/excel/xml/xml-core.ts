@@ -20,7 +20,7 @@ export class XmlCore extends ParseableXmlUnit {
         }
     }
 
-    protected onOpen(node: XMLNodeType) {
+    protected onOpen() {
 
 
     }

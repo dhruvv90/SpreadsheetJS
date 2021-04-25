@@ -13,7 +13,7 @@ class XmlSharedStringItems extends ParseableXmlUnit {
         }
     }
 
-    protected onOpen(node: XMLNodeType): void {
+    protected onOpen(): void {
 
     }
 
@@ -38,7 +38,7 @@ export class XmlSharedStrings extends ParseableXmlUnit {
         }
     }
 
-    protected onOpen(node: XMLNodeType): void {
+    protected onOpen(): void {
 
     }
 
