@@ -2,14 +2,38 @@ import { XMLNodeType } from "../utils";
 import { BaseXmlUnit, ParseableXmlUnit } from "./base";
 
 
+class XmlSharedStringItem extends ParseableXmlUnit {
+
+    constructor(){
+        super('si');
+        this._nodes = {
+            't': new BaseXmlUnit('t')
+        }
+        this._data.items = [];
+    }
+
+    protected processOpen(node: XMLNodeType): void {
+
+    }
+    
+    protected processClose(): void {
+        this._data.items.push(this._nodes['t'].data.value);
+    }
+
+}
+
 export class XmlSharedStrings extends ParseableXmlUnit {
 
     private _sharedStrings: Array<string>;
 
+    public get sharedStrings(){
+        return this._sharedStrings;
+    }
+
     constructor() {
         super('sst');
         this._nodes = {
-            't': new BaseXmlUnit('t'),
+            si: new XmlSharedStringItem(),
         }
         this._sharedStrings = [];
     }
@@ -21,48 +45,8 @@ export class XmlSharedStrings extends ParseableXmlUnit {
         });
     }
 
-    public parseOpen(node: XMLNodeType) {
-        if (node.name === this._tag) {
-            this.processOpen(node);
-        }
-
-        if(node.name === 'si'){
-            this.data.temp = [];
-        }
-
-        if (node.name in this._nodes) {
-            this._parser = this._nodes[node.name];
-            this._parser.parseOpen(node);
-        }
-    }
-
-    public parseText(text: string) {
-        if (this._parser) {
-            this._parser.parseText(text);
-        }
-    }
-
-    public parseClose(node) {
-        if (this._parser) {
-            if(this._parser.tag === 't'){
-                this._data.temp.push(this._parser.data.value)
-            }
-            this._parser.parseClose(node);
-            this._parser = undefined;
-        }
-
-        if (node.name === 'si') {
-            const text = this._data.temp.join('');
-            this._sharedStrings.push(text);
-        }
-
-        if (node.name === this._tag) {
-            this.processClose();
-        }
-    }
-
     protected processClose(): void {
-        this._data.ssList = this._sharedStrings;
+        this._data.ssList = this._nodes['si'].data.items;
     }
 
 }
