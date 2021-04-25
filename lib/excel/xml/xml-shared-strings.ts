@@ -1,5 +1,5 @@
-import { XMLNodeType, XmlValueType } from "../utils";
-import { BaseXmlUnit, ParseableXmlUnit } from "./base";
+import { XMLNodeType } from "../utils";
+import { XmlUnitString, ParseableXmlUnit } from "./base";
 
 
 class XmlSharedStringItems extends ParseableXmlUnit {
@@ -9,7 +9,7 @@ class XmlSharedStringItems extends ParseableXmlUnit {
     constructor() {
         super('si');
         this._nodes = {
-            't': new BaseXmlUnit('t')
+            't': new XmlUnitString('t')
         }
     }
 
@@ -20,8 +20,6 @@ class XmlSharedStringItems extends ParseableXmlUnit {
     protected onClose(): void {
         const tNode = this._nodes['t'];
         this.ssItems.push(tNode.value);
-        
-        tNode.resetValue();
     }
 
 }

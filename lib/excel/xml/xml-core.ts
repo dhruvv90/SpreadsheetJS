@@ -1,5 +1,5 @@
-import { KeyValueGeneric, XMLNodeType, XmlValueType as Xtype } from '../utils';
-import { ParseableXmlUnit, BaseXmlUnit } from './base';
+import { KeyValueGeneric, XMLNodeType } from '../utils';
+import { ParseableXmlUnit, XmlUnitDate, XmlUnitString } from './base';
 
 export class XmlCore extends ParseableXmlUnit {
 
@@ -8,15 +8,15 @@ export class XmlCore extends ParseableXmlUnit {
     constructor() {
         super('cp:coreProperties');
         this._nodes = {
-            'dcterms:created': new BaseXmlUnit('dcterms:created', Xtype.DATETIME),
-            'dc:creator': new BaseXmlUnit('dc:creator'),
-            'dc:description': new BaseXmlUnit('dc:description'),
-            'dc:language': new BaseXmlUnit('dc:language'),
-            'cp:lastModifiedBy': new BaseXmlUnit('cp:lastModifiedBy'),
-            'dcterms:modified': new BaseXmlUnit('dcterms:modified', Xtype.DATETIME),
-            'cp:revision': new BaseXmlUnit('cp:revision'),
-            'dc:subject': new BaseXmlUnit('dc:subject'),
-            'dc:title': new BaseXmlUnit('dc:title'),
+            'dcterms:created': new XmlUnitDate('dcterms:created'),
+            'dc:creator': new XmlUnitString('dc:creator'),
+            'dc:description': new XmlUnitString('dc:description'),
+            'dc:language': new XmlUnitString('dc:language'),
+            'cp:lastModifiedBy': new XmlUnitString('cp:lastModifiedBy'),
+            'dcterms:modified': new XmlUnitDate('dcterms:modified'),
+            'cp:revision': new XmlUnitString('cp:revision'),
+            'dc:subject': new XmlUnitString('dc:subject'),
+            'dc:title': new XmlUnitString('dc:title'),
         }
     }
 

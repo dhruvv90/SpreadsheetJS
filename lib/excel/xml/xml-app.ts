@@ -1,5 +1,5 @@
 import { KeyValueGeneric, XMLNodeType } from '../utils';
-import { BaseXmlUnit, ParseableXmlUnit } from './base';
+import { XmlUnitString, ParseableXmlUnit } from './base';
 
 
 export class XmlApp extends ParseableXmlUnit {
@@ -9,7 +9,7 @@ export class XmlApp extends ParseableXmlUnit {
     constructor() {
         super('Properties');
         this._nodes = {
-            'Application': new BaseXmlUnit('Application'),
+            'Application': new XmlUnitString('Application'),
         }
     }
 

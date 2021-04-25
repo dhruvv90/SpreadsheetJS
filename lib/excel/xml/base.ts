@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { Readable } from 'readable-stream';
-import { KeyValue, KeyValueGeneric, parseSax, XmlDataType, XMLNodeType, XmlValueType } from '../utils';
+import { KeyValue, KeyValueGeneric, parseSax, XmlDataType, XMLNodeType } from '../utils';
 
 /** Every XML Unit which needs to be parsed must extend this */
 export abstract class ParseableXmlUnit {
@@ -24,19 +24,15 @@ export abstract class ParseableXmlUnit {
     protected _tag: string;
 
 
-    public get value() {
-        return this._data.values.join('');
+    public get value(){
+        return this._data.value;
     }
 
-    public resetValue(){
-        this._data.values = [];
+    public set value(value: any){
+        this._data.value = value
     }
 
-    protected addValue(value: any){
-        this._data.values.push(value);
-    }
-
-    public get attributes(){
+    public get attributes() {
         return this._data.attributes;
     }
 
@@ -51,8 +47,7 @@ export abstract class ParseableXmlUnit {
 
         this._nodes = {};
         this._data = {
-            values: [],
-            attributes : {}
+            attributes: {}
         }
     }
 
@@ -89,11 +84,11 @@ export abstract class ParseableXmlUnit {
         if (this._parser) {
             this._parser.parseClose(node);
         }
-        
-        if (node.name in this._nodes){
+
+        if (node.name in this._nodes) {
             this._parser = undefined;
         }
-        
+
         if (node.name === this._tag) {
             this.onClose();
         }
@@ -135,29 +130,14 @@ export abstract class ParseableXmlUnit {
  * Represents a Base XML unit (of a specific type) which can have parseable data and no further nesting. 
  * Every node will converge eventually to a base node. 
  */
-export class BaseXmlUnit extends ParseableXmlUnit {
+export class XmlUnitString extends ParseableXmlUnit {
 
-    private _type: XmlValueType;
-    private _valueParser: Record<XmlValueType, Function>;
-
-
-    constructor(tag: string, type: XmlValueType = XmlValueType.TEXT) {
+    constructor(tag: string) {
         super(tag);
-
-        if (!(type in XmlValueType)) {
-            throw new Error(`Illegal BaseXmlUnit Construction. 'type' : ${type} must be in ${Object.keys(XmlValueType).join(', ')}`);
-        }
-        this._type = type;
-
-        this._valueParser = {
-            [XmlValueType.TEXT]: (value: string) => value,
-            [XmlValueType.DATETIME]: (value: string) => new Date(value),
-        }
     }
 
     public parseText(value: string) {
-        const v = this._valueParser[this._type](value);
-        this.addValue(v);
+        this.value = value;
     }
 
     protected onOpen(node: XMLNodeType): void {
@@ -168,6 +148,28 @@ export class BaseXmlUnit extends ParseableXmlUnit {
 
     }
 }
+
+
+export class XmlUnitDate extends ParseableXmlUnit {
+
+    constructor(tag: string) {
+        super(tag);
+    }
+
+    public parseText(value: string) {
+        this.value = new Date(value);
+    }
+
+    protected onOpen(node: XMLNodeType): void {
+
+    }
+
+    protected onClose(): void {
+
+    }
+}
+
+
 
 
 

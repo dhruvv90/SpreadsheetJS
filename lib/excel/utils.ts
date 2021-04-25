@@ -6,7 +6,7 @@ export type KeyValue<T> = Record<string, T>;
 export type KeyValueGeneric = KeyValue<any>;
 
 export type XmlDataType = {
-    values: Array<any>;
+    value?: any;
     attributes: KeyValueGeneric;
 }
 
@@ -15,10 +15,6 @@ export type XMLNodeType = {
     attributes?: KeyValueGeneric
 }
 
-export enum XmlValueType {
-    TEXT = 'TEXT',
-    DATETIME = 'DATETIME',
-}
 
 
 export const parseSax = async function* (stream: Readable) {
