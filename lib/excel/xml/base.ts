@@ -200,6 +200,7 @@ export class XmlUnitNumber extends ParseableXmlUnit {
         if(isNaN(n)){
             throw new Error(`Invalid Number string : ${value}`);
         }
+        this.value = n;
     }
 
     protected onOpen(): void {
@@ -210,7 +211,4 @@ export class XmlUnitNumber extends ParseableXmlUnit {
 
     }
 }
-
-
-
 

@@ -6,6 +6,7 @@ import { XmlApp } from './xml/xml-app';
 import { XmlCore } from './xml/xml-core';
 import { XmlSharedStrings } from './xml/xml-shared-strings';
 import { XmlWorkbook } from './xml/xml-workbook';
+import { XmlWorksheet } from './xml/xml-worksheet';
 
 
 export namespace Excel {
@@ -56,9 +57,9 @@ export namespace Excel {
 
                 // Default highWaterMark is 16 KB on most environments. 
                 // Defining 10KB here to avoid backpressure in case of large XMLs.
-                const chunkSize = 10 * 1024; 
+                const chunkSize = 10 * 1024;
                 for (let i = 0; i < content.length; i += chunkSize) {
-                    stream.write(content.substring(i, i+chunkSize));
+                    stream.write(content.substring(i, i + chunkSize));
                 }
                 stream.end();
 
@@ -78,7 +79,7 @@ export namespace Excel {
                         await xmlCore.parseStream(stream);
                         Object.assign(this._data.meta, xmlCore.metadata);
                         break;
-                    
+
                     case '/xl/sharedStrings.xml':
                     case 'xl/sharedStrings.xml':
                         const xmlSharedStrings = new XmlSharedStrings();
@@ -97,7 +98,13 @@ export namespace Excel {
                         break;
 
                     default:
-                        break;
+                        // Spreadsheet data
+                        const match = entry.name.match(/xl\/worksheets\/sheet(\d+).xml/);
+                        if (match) {
+                            const xSheet = new XmlWorksheet(match[1]);
+                            await xSheet.parseStream(stream);
+                            this._data.worksheets.push(xSheet.worksheet);
+                        }
                 }
             }
         }
