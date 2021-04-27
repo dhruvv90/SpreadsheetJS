@@ -98,16 +98,40 @@ export const isString = function (x: any) {
     return (typeof x == 'string') || (x instanceof String);
 }
 
+
+//-----------------
+//  Cell Notation Utils
+//-----------------
+
+
 /** Return 1-based index of col from string notation(e.g A -> 1) */
 export const colToIdx = function (col: string) {
+    const match = col.match(/^[A-Z]+$/);
+    if (!match) {
+        throw new Error(`Invalid Column string : ${col}`);
+    }
+
     let result = 0;
     for (let i = col.length - 1; i >= 0; i--) {
         const unicode = col.toUpperCase().charCodeAt(i);
         if (unicode < 65 || unicode > 90) {
-            return;
+            throw new Error(`Invalid Column string : ${col}`);
         }
         const multFactor = (i + 1 === col.length) ? 1 : 26;
         result += (unicode - 64) * multFactor;
     }
     return result;
+}
+
+
+/** Cell Reference (e.g A3) to 1-based index of row , column */
+export const refToRC = function (r: string) {
+    const match = r.match(/^([A-Z]+)(\d+)$/);
+    if (!match) {
+        throw new Error(`Invalid Cell reference : ${r}`);
+    }
+    return {
+        row: Number(match[2]),
+        col: colToIdx(match[1])
+    }
 }

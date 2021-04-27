@@ -78,7 +78,7 @@ class XmlRow extends ParseableXmlUnit {
     }
 
     protected onClose(): void {
-        this._currentRow.cells = this._cellNode.cells;
+        this._currentRow.addCells(this._cellNode.cells);
         this.rows.push(this._currentRow);
 
         this._currentRow = undefined;
