@@ -78,3 +78,36 @@ export const isValidDate = function (d: Date) {
     return !!d && !isNaN(d.getTime())
 }
 
+export const inverseMap = function (kv: KeyValueGeneric): KeyValueGeneric {
+    if (!kv) return {};
+
+    const result: KeyValueGeneric = {};
+    Object.keys(kv).forEach((k) => {
+        result[kv[k]] = k;
+    });
+    return result;
+}
+
+export const CellDataTypeInv = inverseMap(CellDataType);
+
+export const isNumber = function (x: any) {
+    return (typeof x == 'number') || (x instanceof Number);
+}
+
+export const isString = function (x: any) {
+    return (typeof x == 'string') || (x instanceof String);
+}
+
+/** Return 1-based index of col from string notation(e.g A -> 1) */
+export const colToIdx = function (col: string) {
+    let result = 0;
+    for (let i = col.length - 1; i >= 0; i--) {
+        const unicode = col.toUpperCase().charCodeAt(i);
+        if (unicode < 65 || unicode > 90) {
+            return;
+        }
+        const multFactor = (i + 1 === col.length) ? 1 : 26;
+        result += (unicode - 64) * multFactor;
+    }
+    return result;
+}
