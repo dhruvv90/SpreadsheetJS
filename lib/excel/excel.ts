@@ -23,7 +23,7 @@ export namespace Excel {
         constructor(options: any = {}) {
             this._internal = {
                 sharedStrings: {},
-                sheetsInfo: []
+                sheetsInfo: {}
             }
         }
 
