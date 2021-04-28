@@ -1,4 +1,4 @@
-import { CellDataType, KeyValueGeneric } from "./constants";
+import { KeyValueGeneric } from "./constants";
 import * as saxes from 'saxes';
 import { Readable } from 'readable-stream';
 
