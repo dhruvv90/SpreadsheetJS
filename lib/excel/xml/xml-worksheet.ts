@@ -47,12 +47,14 @@ class XmlCell extends ParseableXmlUnit {
     }
 
     protected onClose(): void {
-        const vNode = this._nodes['v'];
         const fNode = this._nodes['f'];
-        if(vNode) this._currentCell.value = vNode.value;
-        if(fNode) this._currentCell.formula = fNode.value
+        this._currentCell.formula = fNode.value;
 
-        this.cells.push(this._currentCell);
+        const vNode = this._nodes['v'];
+        if(vNode){
+            this._currentCell.value = vNode.value;
+            this.cells.push(this._currentCell);
+        }
     }
 }
 
