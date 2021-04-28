@@ -1,4 +1,4 @@
-import { Cell, Row, Worksheet } from "../model";
+import { Cell, Row, Worksheet } from "../models";
 import { CellDataType, CellDataTypeInv } from "../utils";
 import { XmlUnitString, ParseableXmlUnit, XmlUnitDate, XmlUnitNumber } from "./base";
 
