@@ -1,6 +1,6 @@
 import { Excel } from "./excel";
 import { CellDataType, SheetState, SheetStateInv } from "./constants";
-import { refToRC, colToIdx, isNumber, isString } from "./helper";
+import { refToRC, colToIdx, isNumber, isString } from "./utils";
 
 export class Worksheet {
     private _state: SheetState;
