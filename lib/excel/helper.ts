@@ -1,43 +1,37 @@
+import { CellDataType, KeyValueGeneric } from "./constants";
 import * as saxes from 'saxes';
 import { Readable } from 'readable-stream';
 
 
-export type KeyValue<T> = Record<string, T>;
-export type KeyValueGeneric = KeyValue<any>;
+/**
+ * can process these forms - case insensitive :  'true', 't'. All others/undef is false
+ */
+ export const stringToBool = function (s: string, undefIsFalse = false): boolean {
+    if (!s) return false;
 
-export type XmlDataType = {
-    value?: any;
-    attributes: KeyValueGeneric;
+    const truthyList = ['true', 't'];
+    const comparator = s.toLowerCase();
+    if (truthyList.includes(comparator)) return true;
+
+    return false;
 }
 
-export type XMLNodeType = {
-    name: string;
-    attributes?: KeyValueGeneric
+export const isValidDate = function (d: Date) {
+    return !!d && !isNaN(d.getTime())
 }
 
-export enum SheetState {
-    HIDDEN = 'hidden',
-    VISIBLE = 'visible'
+export const isNumber = function (x: any) {
+    return (typeof x == 'number') || (x instanceof Number);
 }
 
-export type SheetInfo = {
-    sheetId: number;
-    rId: string;
-    name: string;
-    state: SheetState;
-}
-
-export enum CellDataType {
-    BOOLEAN = 'b',
-    DATE = 'd',
-    ERROR = 'e',
-    INLINE_STRING = 'inlineStr',
-    NUMBER = 'n',
-    SHARED_STRING = 's',
-    STRING = 'str'
+export const isString = function (x: any) {
+    return (typeof x == 'string') || (x instanceof String);
 }
 
 
+//-----------------
+//  XML Utils
+//-----------------
 
 export const parseSax = async function* (stream: Readable) {
     const parser = new saxes.SaxesParser();
@@ -59,43 +53,6 @@ export const parseSax = async function* (stream: Readable) {
         yield events;
         events = [];
     }
-}
-
-/**
- * can process these forms - case insensitive :  'true', 't'. All others/undef is false
- */
-export const stringToBool = function (s: string, undefIsFalse = false): boolean {
-    if (!s) return false;
-
-    const truthyList = ['true', 't'];
-    const comparator = s.toLowerCase();
-    if (truthyList.includes(comparator)) return true;
-
-    return false;
-}
-
-export const isValidDate = function (d: Date) {
-    return !!d && !isNaN(d.getTime())
-}
-
-export const inverseMap = function (kv: KeyValueGeneric): KeyValueGeneric {
-    if (!kv) return {};
-
-    const result: KeyValueGeneric = {};
-    Object.keys(kv).forEach((k) => {
-        result[kv[k]] = k;
-    });
-    return result;
-}
-
-export const CellDataTypeInv = inverseMap(CellDataType);
-
-export const isNumber = function (x: any) {
-    return (typeof x == 'number') || (x instanceof Number);
-}
-
-export const isString = function (x: any) {
-    return (typeof x == 'string') || (x instanceof String);
 }
 
 
@@ -134,4 +91,15 @@ export const refToRC = function (r: string) {
         row: Number(match[2]),
         col: colToIdx(match[1])
     }
+}
+
+
+export const inverseMap = function (kv: KeyValueGeneric): KeyValueGeneric {
+    if (!kv) return {};
+
+    const result: KeyValueGeneric = {};
+    Object.keys(kv).forEach((k) => {
+        result[kv[k]] = k;
+    });
+    return result;
 }

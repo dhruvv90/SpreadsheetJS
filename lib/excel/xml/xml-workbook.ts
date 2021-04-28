@@ -1,4 +1,4 @@
-import { KeyValue, SheetInfo, XMLNodeType } from "../utils";
+import { KeyValue, SheetInfo, SheetStateInv, XMLNodeType } from "../constants";
 import { ParseableXmlUnit } from "./base";
 
 
@@ -13,10 +13,15 @@ class XmlSheetInfo extends ParseableXmlUnit {
 
     protected onOpen(): void {
         const sheetId = this.attributes.sheetId;
+        const state = SheetStateInv[this.attributes.state];
+        if (!state) {
+            throw new Error(`Unable to parse sheet state : ${this.attributes.state} for sheet : ${sheetId}`);
+        }
+
         this.sheetsInfo[sheetId] = {
             sheetId,
+            state,
             name: this.attributes.name,
-            state: this.attributes.state,
             rId: this.attributes['r:id']
         };
     }

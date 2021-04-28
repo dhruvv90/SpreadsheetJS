@@ -1,4 +1,4 @@
-import { XMLNodeType } from "../utils";
+import { XMLNodeType } from "../constants";
 import { XmlUnitString, ParseableXmlUnit } from "./base";
 
 

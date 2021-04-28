@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as jsZip from 'jszip';
 import { Readable, PassThrough } from 'readable-stream';
 import { Worksheet } from './models';
-import { KeyValueGeneric } from './utils';
+import { KeyValue, KeyValueGeneric, SheetInfo } from './constants';
 import { XmlApp } from './xml/xml-app';
 import { XmlCore } from './xml/xml-core';
 import { XmlSharedStrings } from './xml/xml-shared-strings';
@@ -12,20 +12,31 @@ import { XmlWorksheet } from './xml/xml-worksheet';
 
 export namespace Excel {
 
+    export type wbInternalType = {
+        sharedStrings: {
+            ssItems: Array<string>;
+            count: number
+        },
+
+        sheetsInfo: KeyValue<SheetInfo>;
+    }
+
     export class Workbook {
 
-        private _internal: KeyValueGeneric;
+        private _internal: wbInternalType = {
+            sharedStrings: {
+                ssItems: [],
+                count: 0
+            },
+            sheetsInfo: {}
+        };
 
         private _worksheets: Array<Worksheet> = [];
         private _isParsingComplete: boolean = false;
         private _meta: KeyValueGeneric = {};
 
-        constructor(options: any = {}) {
-            this._internal = {
-                sharedStrings: {},
-                sheetsInfo: {}
-            }
-        }
+        constructor(options: any = {}) { }
+
 
         public async readFileAsync(path: string) {
             if (!fs.existsSync(path)) {
@@ -87,10 +98,8 @@ export namespace Excel {
                     case 'xl/sharedStrings.xml':
                         const xmlSharedStrings = new XmlSharedStrings();
                         await xmlSharedStrings.parseStream(stream);
-                        Object.assign(this._internal.sharedStrings, {
-                            ssItems: xmlSharedStrings.ssItems,
-                            count: xmlSharedStrings.count
-                        });
+                        this._internal.sharedStrings.ssItems = xmlSharedStrings.ssItems;
+                        this._internal.sharedStrings.count = xmlSharedStrings.count;
                         break;
 
                     case '/xl/workbook.xml':
