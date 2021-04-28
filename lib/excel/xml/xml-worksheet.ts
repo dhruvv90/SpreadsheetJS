@@ -77,8 +77,10 @@ class XmlRow extends ParseableXmlUnit {
 
     protected onClose(): void {
         const cNode = this._nodes['c'] as XmlCell;
-        this._currentRow.addCells(cNode.cells);
-        this.rows.push(this._currentRow);
+        if(cNode.cells.length){
+            this._currentRow.addCells(cNode.cells);
+            this.rows.push(this._currentRow);
+        }
     }
 }
 
@@ -122,7 +124,8 @@ export class XmlWorksheet extends ParseableXmlUnit {
     }
 
     protected onClose(): void {
-        this.worksheet.rows = (this._nodes['sheetData'] as XmlSheetData).rows;
+        const sNode = this._nodes['sheetData'] as XmlSheetData;
+        this.worksheet.addRows(sNode.rows);
     }
 
 }

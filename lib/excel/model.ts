@@ -15,8 +15,8 @@ export class Worksheet {
         this._state = s;
     }
 
-    public set rows(r: Array<Row>) {
-        this._rows = r;
+    public addRows(r: Array<Row>) {
+        r.forEach((row) => this._rows[row.idx -1] = row);
     }
 
     /**
@@ -27,20 +27,12 @@ export class Worksheet {
         return this._rows[idx - 1];
     }
 
-    /**
-     * 
-     * @param i Standard Column notation
-     */
-    public getCell(i: string) {
-
-    }
-
 
     /**
      * 
      * @param fn (cell, idx), where idx is 1-based index 
      */
-    public eachCell(fn: (row: Row, idx: Number) => void) {
+    public eachCell(fn: (row: Row, idx: number) => void) {
         this._rows.forEach((row, idx) => {
             fn(row, idx + 1);
         });
@@ -96,9 +88,9 @@ export class Row {
     private _cells: Array<Cell> = [];
 
     /** 1-based index */
-    public idx: Number;
+    public idx: number;
 
-    constructor(idx: Number) {
+    constructor(idx: number) {
         this.idx = idx;
     }
 
@@ -130,7 +122,7 @@ export class Row {
      * 
      * @param fn (cell, idx), where idx is 1-based index 
      */
-    public eachCell(fn: (cell: Cell, idx: Number) => void) {
+    public eachCell(fn: (cell: Cell, idx: number) => void) {
         this._cells.forEach((cell) => {
             fn(cell, cell.colNumber);
         });
