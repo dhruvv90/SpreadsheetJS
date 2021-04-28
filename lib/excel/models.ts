@@ -1,4 +1,4 @@
-import { CellDataType, colToIdx, isNumber, isString, refToRC, SheetState } from "./utils";
+import { CellDataType, colToIdx, isNumber, isString, KeyValueGeneric, refToRC, SheetState } from "./utils";
 
 export class Worksheet {
     private _state: SheetState;
@@ -60,6 +60,10 @@ export class Worksheet {
         this._rows.forEach((row, idx) => {
             fn(row, idx + 1);
         });
+    }
+
+    public reconcile(data: KeyValueGeneric) {
+
     }
 };
 

@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as jsZip from 'jszip';
 import { Readable, PassThrough } from 'readable-stream';
+import { Worksheet } from './models';
 import { KeyValueGeneric } from './utils';
 import { XmlApp } from './xml/xml-app';
 import { XmlCore } from './xml/xml-core';
@@ -13,12 +14,14 @@ export namespace Excel {
 
     export class Workbook {
 
-        private _data: KeyValueGeneric;
+        private _internal: KeyValueGeneric;
+
+        private _worksheets: Array<Worksheet> = [];
+        private _isParsingComplete: boolean = false;
+        private _meta: KeyValueGeneric = {};
 
         constructor(options: any = {}) {
-            this._data = {
-                meta: {},
-                worksheets: [],
+            this._internal = {
                 sharedStrings: {},
                 sheetsInfo: []
             }
@@ -68,7 +71,7 @@ export namespace Excel {
                     case 'docProps/app.xml':
                         const xmlApp = new XmlApp();
                         await xmlApp.parseStream(stream);
-                        Object.assign(this._data.meta, {
+                        Object.assign(this._meta, {
                             application: xmlApp.application
                         });
                         break;
@@ -77,14 +80,14 @@ export namespace Excel {
                     case 'docProps/core.xml':
                         const xmlCore = new XmlCore();
                         await xmlCore.parseStream(stream);
-                        Object.assign(this._data.meta, xmlCore.metadata);
+                        Object.assign(this._meta, xmlCore.metadata);
                         break;
 
                     case '/xl/sharedStrings.xml':
                     case 'xl/sharedStrings.xml':
                         const xmlSharedStrings = new XmlSharedStrings();
                         await xmlSharedStrings.parseStream(stream);
-                        Object.assign(this._data.sharedStrings, {
+                        Object.assign(this._internal.sharedStrings, {
                             ssItems: xmlSharedStrings.ssItems,
                             count: xmlSharedStrings.count
                         });
@@ -94,7 +97,7 @@ export namespace Excel {
                     case 'xl/workbook.xml':
                         const xmlWorkbook = new XmlWorkbook();
                         await xmlWorkbook.parseStream(stream);
-                        this._data.sheetsInfo = xmlWorkbook.sheetsInfo;
+                        this._internal.sheetsInfo = xmlWorkbook.sheetsInfo;
                         break;
 
                     default:
@@ -103,10 +106,22 @@ export namespace Excel {
                         if (match) {
                             const xSheet = new XmlWorksheet(match[1]);
                             await xSheet.parseStream(stream);
-                            this._data.worksheets.push(xSheet.worksheet);
+                            this._worksheets.push(xSheet.worksheet);
                         }
                 }
             }
+            this._isParsingComplete = true;
+            this._reconcile();
+        }
+
+        /** Post processing after parsing is complete */
+        private _reconcile() {
+            if (!this._isParsingComplete) {
+                throw new Error('Invalid Call to _reconcile. This operation is only allowed after parsing');
+            }
+
+            this._worksheets.forEach((sheet) => sheet.reconcile(this._internal));
+            delete this._internal;
         }
     }
 }
