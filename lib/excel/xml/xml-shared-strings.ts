@@ -8,22 +8,16 @@ class XmlSharedStringItems extends ParseableXmlUnit {
 
     constructor() {
         super('si');
-        this._nodes = {
-            't': new XmlUnitString('t', {concat: true})
-        }
     }
 
     protected onOpen(): void {
-
+        this._nodes['t'] = new XmlUnitString('t', { concat: true });
     }
 
     protected onClose(): void {
         const tNode = this._nodes['t'] as XmlUnitString;
         this.ssItems.push(tNode.value);
-
-        tNode.resetValue();
     }
-
 }
 
 export class XmlSharedStrings extends ParseableXmlUnit {
@@ -43,8 +37,8 @@ export class XmlSharedStrings extends ParseableXmlUnit {
     }
 
     protected onClose() {
-        this.ssItems = (this._nodes['si'] as XmlSharedStringItems).ssItems;
+        const siNode = this._nodes['si'] as XmlSharedStringItems;
+        this.ssItems = siNode.ssItems;
         this.count = Number(this.attributes.count);
     }
-
 }

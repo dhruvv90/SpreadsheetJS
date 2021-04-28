@@ -158,10 +158,6 @@ export class XmlUnitString extends ParseableXmlUnit {
     protected onClose(): void {
 
     }
-
-    public resetValue() {
-        this.value = '';
-    }
 }
 
 

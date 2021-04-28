@@ -7,15 +7,19 @@ class XmlCell extends ParseableXmlUnit {
 
     public cells: Array<Cell> = [];
     private _currentCell: Cell;
+    private _typeToClassMapping = {
+        [CellDataType.DATE]: XmlUnitDate,
+        [CellDataType.ERROR]: XmlUnitString,
+        [CellDataType.INLINE_STRING]: XmlUnitNumber,
+        [CellDataType.NUMBER]: XmlUnitNumber,
+        [CellDataType.SHARED_STRING]: XmlUnitNumber,
+        [CellDataType.STRING]: XmlUnitString,
+    };
 
 
     constructor() {
         super('c');
         this._nodes['f'] = new XmlUnitString('f');
-    }
-
-    public resetValue() {
-        this.cells = [];
     }
 
     protected onOpen() {
@@ -30,30 +34,25 @@ class XmlCell extends ParseableXmlUnit {
             if (!fullType) {
                 throw new Error(`Invalid Cell value type : ${t} for ${r}`);
             }
+            this._currentCell.type = fullType;
 
-            const valTypeMap = {
-                [CellDataType.DATE]: XmlUnitDate,
-                [CellDataType.ERROR]: XmlUnitString,
-                [CellDataType.INLINE_STRING]: XmlUnitNumber,
-                [CellDataType.NUMBER]: XmlUnitNumber,
-                [CellDataType.SHARED_STRING]: XmlUnitNumber,
-                [CellDataType.STRING]: XmlUnitString,
-            }
-            const valType = valTypeMap[t];
-            if (!valType) {
+            const valueClass = this._typeToClassMapping[t];
+            if (!valueClass) {
                 throw new Error(`For Cell : ${r}, dataType : '${t}' ( ${fullType} ) is not supported yet.`)
             }
-            this._nodes['v'] = new valType('v');
-            this._currentCell.type = fullType;
+            this._nodes['v'] = new valueClass('v');
         }
+
+        this._nodes['f'] = new XmlUnitString('f');
     }
 
     protected onClose(): void {
-        this._currentCell.formula = this._nodes['f'].value;
-        this._currentCell.value = this._nodes['v'].value;
+        const vNode = this._nodes['v'];
+        const fNode = this._nodes['f'];
+        if(vNode) this._currentCell.value = vNode.value;
+        if(fNode) this._currentCell.formula = fNode.value
 
         this.cells.push(this._currentCell);
-        this._currentCell = undefined;
     }
 }
 
@@ -61,28 +60,23 @@ class XmlCell extends ParseableXmlUnit {
 class XmlRow extends ParseableXmlUnit {
 
     public rows: Array<Row> = [];
-
     private _currentRow: Row;
-    private _cellNode: XmlCell;
 
     constructor() {
         super('row');
-        this._cellNode = new XmlCell();
-        this._nodes = {
-            'c': this._cellNode
-        }
     }
 
     protected onOpen(): void {
         this._currentRow = new Row(Number(this.attributes.r));
+        this._nodes = {
+            'c': new XmlCell()
+        }
     }
 
     protected onClose(): void {
-        this._currentRow.addCells(this._cellNode.cells);
+        const cNode = this._nodes['c'] as XmlCell;
+        this._currentRow.addCells(cNode.cells);
         this.rows.push(this._currentRow);
-
-        this._currentRow = undefined;
-        this._cellNode.resetValue();
     }
 }
 
