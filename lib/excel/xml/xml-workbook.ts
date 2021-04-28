@@ -1,10 +1,10 @@
-import { SheetInfo, XMLNodeType } from "../utils";
+import { KeyValue, SheetInfo, SheetStateInv, XMLNodeType } from "../constants";
 import { ParseableXmlUnit } from "./base";
 
 
 class XmlSheetInfo extends ParseableXmlUnit {
 
-    public sheetsInfo: Array<SheetInfo> = [];
+    public sheetsInfo: KeyValue<SheetInfo> = {};
 
 
     constructor() {
@@ -12,12 +12,18 @@ class XmlSheetInfo extends ParseableXmlUnit {
     }
 
     protected onOpen(): void {
-        this.sheetsInfo.push({
-            name : this.attributes.name,
-            sheetId: this.attributes.sheetId,
-            state : this.attributes.state,
+        const sheetId = this.attributes.sheetId;
+        const state = SheetStateInv[this.attributes.state];
+        if (!state) {
+            throw new Error(`Unable to parse sheet state : ${this.attributes.state} for sheet : ${sheetId}`);
+        }
+
+        this.sheetsInfo[sheetId] = {
+            sheetId,
+            state,
+            name: this.attributes.name,
             rId: this.attributes['r:id']
-        });
+        };
     }
 
     protected onClose(): void {
@@ -27,7 +33,7 @@ class XmlSheetInfo extends ParseableXmlUnit {
 
 class XmlSheetsInfo extends ParseableXmlUnit {
 
-    public sheetsInfo: Array<SheetInfo> = [];
+    public sheetsInfo: KeyValue<SheetInfo> = {};
 
     constructor() {
         super('sheets');
@@ -48,7 +54,7 @@ class XmlSheetsInfo extends ParseableXmlUnit {
 
 export class XmlWorkbook extends ParseableXmlUnit {
 
-    public sheetsInfo: Array<SheetInfo> = [];
+    public sheetsInfo: KeyValue<SheetInfo> = {};
 
     constructor() {
         super('workbook');

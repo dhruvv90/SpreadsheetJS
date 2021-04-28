@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as jsZip from 'jszip';
 import { Readable, PassThrough } from 'readable-stream';
-import { KeyValueGeneric } from './utils';
+import { Worksheet } from './models';
+import { KeyValue, KeyValueGeneric, SheetInfo } from './constants';
 import { XmlApp } from './xml/xml-app';
 import { XmlCore } from './xml/xml-core';
 import { XmlSharedStrings } from './xml/xml-shared-strings';
@@ -11,18 +12,31 @@ import { XmlWorksheet } from './xml/xml-worksheet';
 
 export namespace Excel {
 
+    export type wbInternalType = {
+        sharedStrings: {
+            ssItems: Array<string>;
+            count: number
+        },
+
+        sheetsInfo: KeyValue<SheetInfo>;
+    }
+
     export class Workbook {
 
-        private _data: KeyValueGeneric;
+        private _internal: wbInternalType = {
+            sharedStrings: {
+                ssItems: [],
+                count: 0
+            },
+            sheetsInfo: {}
+        };
 
-        constructor(options: any = {}) {
-            this._data = {
-                meta: {},
-                worksheets: [],
-                sharedStrings: {},
-                sheetsInfo: []
-            }
-        }
+        private _worksheets: Array<Worksheet> = [];
+        private _isParsingComplete: boolean = false;
+        private _meta: KeyValueGeneric = {};
+
+        constructor(options: any = {}) { }
+
 
         public async readFileAsync(path: string) {
             if (!fs.existsSync(path)) {
@@ -68,7 +82,7 @@ export namespace Excel {
                     case 'docProps/app.xml':
                         const xmlApp = new XmlApp();
                         await xmlApp.parseStream(stream);
-                        Object.assign(this._data.meta, {
+                        Object.assign(this._meta, {
                             application: xmlApp.application
                         });
                         break;
@@ -77,24 +91,22 @@ export namespace Excel {
                     case 'docProps/core.xml':
                         const xmlCore = new XmlCore();
                         await xmlCore.parseStream(stream);
-                        Object.assign(this._data.meta, xmlCore.metadata);
+                        Object.assign(this._meta, xmlCore.metadata);
                         break;
 
                     case '/xl/sharedStrings.xml':
                     case 'xl/sharedStrings.xml':
                         const xmlSharedStrings = new XmlSharedStrings();
                         await xmlSharedStrings.parseStream(stream);
-                        Object.assign(this._data.sharedStrings, {
-                            ssItems: xmlSharedStrings.ssItems,
-                            count: xmlSharedStrings.count
-                        });
+                        this._internal.sharedStrings.ssItems = xmlSharedStrings.ssItems;
+                        this._internal.sharedStrings.count = xmlSharedStrings.count;
                         break;
 
                     case '/xl/workbook.xml':
                     case 'xl/workbook.xml':
                         const xmlWorkbook = new XmlWorkbook();
                         await xmlWorkbook.parseStream(stream);
-                        this._data.sheetsInfo = xmlWorkbook.sheetsInfo;
+                        this._internal.sheetsInfo = xmlWorkbook.sheetsInfo;
                         break;
 
                     default:
@@ -103,10 +115,22 @@ export namespace Excel {
                         if (match) {
                             const xSheet = new XmlWorksheet(match[1]);
                             await xSheet.parseStream(stream);
-                            this._data.worksheets.push(xSheet.worksheet);
+                            this._worksheets.push(xSheet.worksheet);
                         }
                 }
             }
+            this._isParsingComplete = true;
+            this._reconcile();
+        }
+
+        /** Post processing after parsing is complete */
+        private _reconcile() {
+            if (!this._isParsingComplete) {
+                throw new Error('Invalid Call to _reconcile. This operation is only allowed after parsing');
+            }
+
+            this._worksheets.forEach((sheet) => sheet.reconcile(this._internal));
+            delete this._internal;
         }
     }
 }

@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import { Readable } from 'readable-stream';
-import { isValidDate, KeyValue, KeyValueGeneric, parseSax, XmlDataType, XMLNodeType } from '../utils';
+import { KeyValue, KeyValueGeneric, XmlDataType, XMLNodeType } from '../constants';
+import {isValidDate, parseSax} from '../helper';
 
 /** Every XML Unit which needs to be parsed must extend this */
 export abstract class ParseableXmlUnit {

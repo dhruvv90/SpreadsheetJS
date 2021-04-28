@@ -1,18 +1,24 @@
-import { CellDataType, colToIdx, isNumber, isString, refToRC, SheetState } from "./utils";
+import { Excel } from "./excel";
+import { CellDataType, SheetState, SheetStateInv } from "./constants";
+import { refToRC, colToIdx, isNumber, isString } from "./helper";
 
 export class Worksheet {
     private _state: SheetState;
     private _rows: Array<Row> = [];
+    private _name: string;
 
     /** 1-based index */
     private _idx: number;
 
-    constructor(id: string, s: SheetState = SheetState.VISIBLE) {
+    constructor(id: string) {
         if (!isNumber(Number(id))) {
             throw new Error(`Invalid id : ${id} for sheet`);
         }
         this._idx = Number(id);
-        this._state = s;
+    }
+
+    public get name(){
+        return this._name;
     }
 
     public addRows(r: Array<Row>) {
@@ -60,6 +66,13 @@ export class Worksheet {
         this._rows.forEach((row, idx) => {
             fn(row, idx + 1);
         });
+    }
+
+    public reconcile(data: Excel.wbInternalType) {
+        if(this._idx in data.sheetsInfo){
+            this._name = data.sheetsInfo[this._idx].name;
+            this._state = data.sheetsInfo[this._idx].state;
+        }
     }
 };
 
