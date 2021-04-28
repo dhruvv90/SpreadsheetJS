@@ -3,11 +3,7 @@ import * as jsZip from 'jszip';
 import { Readable, PassThrough } from 'readable-stream';
 import { Worksheet } from './models';
 import { KeyValue, KeyValueGeneric, SheetInfo } from './constants';
-import { XmlApp } from './xml/xml-app';
-import { XmlCore } from './xml/xml-core';
-import { XmlSharedStrings } from './xml/xml-shared-strings';
-import { XmlWorkbook } from './xml/xml-workbook';
-import { XmlWorksheet } from './xml/xml-worksheet';
+import { XmlApp, XmlCore, XmlSharedStrings, XmlWorkbook, XmlWorksheet } from './xml';
 
 
 export namespace Excel {
