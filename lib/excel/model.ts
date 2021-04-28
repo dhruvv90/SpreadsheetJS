@@ -16,7 +16,7 @@ export class Worksheet {
     }
 
     public addRows(r: Array<Row>) {
-        r.forEach((row) => this._rows[row.idx -1] = row);
+        r.forEach((row) => this._rows[row.idx - 1] = row);
     }
 
     /**
@@ -27,12 +27,36 @@ export class Worksheet {
         return this._rows[idx - 1];
     }
 
+    public getCellByRef(r: string) {
+        const { row, col } = refToRC(r);
+        return this.getCellByRC(row, col);
+    }
+
+    /**
+     * @param row 1-based index
+     * @param col 1-based index
+     */
+    public getCellByRC(row: number, col: number) {
+        const r = this.getRow(row);
+        if (r) {
+            return r.getCell(col);
+        }
+    }
+
+    public rowCount() {
+        return this._rows.length;
+    }
+
+    public getLastRow() {
+        return this._rows[this.rowCount() - 1];
+    }
+
 
     /**
      * 
-     * @param fn (cell, idx), where idx is 1-based index 
+     * @param fn (row, idx), where idx is 1-based index 
      */
-    public eachCell(fn: (row: Row, idx: number) => void) {
+    public eachRow(fn: (row: Row, idx: number) => void) {
         this._rows.forEach((row, idx) => {
             fn(row, idx + 1);
         });
