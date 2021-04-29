@@ -1,7 +1,8 @@
 import { Excel } from "../excel";
 import { SheetState } from "../constants";
-import { refToRC, isNumber } from "../utils";
+import { refToRC, isNumber, colToIdx, isString } from "../utils";
 import { Row } from "./row";
+import { Column } from "./column";
 
 
 export class Worksheet {
@@ -9,7 +10,9 @@ export class Worksheet {
     private _state: SheetState;
 
     private _rows: Array<Row> = [];
-    
+
+    private _columns: Array<Column> = [];
+
     private _name: string;
 
     /** 1-based index */
@@ -24,7 +27,7 @@ export class Worksheet {
     }
 
 
-    public get name(){
+    public get name() {
         return this._name;
     }
 
@@ -44,7 +47,7 @@ export class Worksheet {
 
     public getCellByRef(r: string) {
         const { row, col } = refToRC(r);
-        return this.getCellByRC(row, col);
+        return this.getCellByRC(row, colToIdx(col));
     }
 
 
@@ -80,8 +83,27 @@ export class Worksheet {
     }
 
 
+    public addColumns(c: Array<Column>) {
+        c.forEach((column) => this._columns[column.idx - 1] = column);
+    }
+
+
+    /**
+     * @param idx 1-based index OR string (e.g C, A)
+     */
+    public getColumn(i: number | string) {
+        let idx;
+        if (isNumber(i)) {
+            idx = i;
+        }
+        else if (isString(i)) {
+            idx = colToIdx(i as string);
+        }
+        return this._columns[idx - 1];
+    }
+
     public reconcile(data: Excel.wbInternalType) {
-        if(this._idx in data.sheetsInfo){
+        if (this._idx in data.sheetsInfo) {
             this._name = data.sheetsInfo[this._idx].name;
             this._state = data.sheetsInfo[this._idx].state;
         }

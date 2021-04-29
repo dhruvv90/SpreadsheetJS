@@ -1,5 +1,5 @@
 import { CellDataType } from "../constants";
-import { refToRC } from "../utils";
+import { colToIdx, refToRC } from "../utils";
 
 
 export class Cell {
@@ -14,7 +14,7 @@ export class Cell {
 
     private _row: number;
 
-    private _col: number;
+    private _col: string;
 
 
     constructor(ref: string) {
@@ -32,6 +32,10 @@ export class Cell {
 
 
     public get colNumber() {
+        return colToIdx(this._col);
+    }
+
+    public get colString() {
         return this._col;
     }
 

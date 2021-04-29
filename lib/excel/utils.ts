@@ -6,7 +6,7 @@ import { Readable } from 'readable-stream';
 /**
  * can process these forms - case insensitive :  'true', 't'. All others/undef is false
  */
- export const stringToBool = function (s: string, undefIsFalse = false): boolean {
+export const stringToBool = function (s: string, undefIsFalse = false): boolean {
     if (!s) return false;
 
     const truthyList = ['true', 't'];
@@ -57,16 +57,13 @@ export const parseSax = async function* (stream: Readable) {
 
 
 //-----------------
-//  Cell Notation Utils
+//  Model Utils - Cell / Row / Column / Sheet
 //-----------------
 
 
-/** Return 1-based index of col from string notation(e.g A -> 1) */
+/** Validates col string and converts to 1-based index (e.g A -> 1) */
 export const colToIdx = function (col: string) {
-    const match = col.match(/^[A-Z]+$/);
-    if (!match) {
-        throw new Error(`Invalid Column string : ${col}`);
-    }
+    validateColString(col);
 
     let result = 0;
     for (let i = col.length - 1; i >= 0; i--) {
@@ -81,16 +78,29 @@ export const colToIdx = function (col: string) {
 }
 
 
-/** Cell Reference (e.g A3) to 1-based index of row , column */
+/** Validates Cell Reference (e.g A3) and converts it to to 1-based index of row , column */
 export const refToRC = function (r: string) {
-    const match = r.match(/^([A-Z]+)(\d+)$/);
-    if (!match) {
-        throw new Error(`Invalid Cell reference : ${r}`);
-    }
+    const match = validateRef(r, true);
     return {
         row: Number(match[2]),
-        col: colToIdx(match[1])
+        col: match[1]
     }
+}
+
+const validateRef = function (r: string, throwOnFail = false) {
+    const match = r.match(/^([A-Z]+)(\d+)$/);
+    if (throwOnFail && !match) {
+        throw new Error(`Invalid Reference : ${r}`);
+    }
+    return match;
+}
+
+const validateColString = function (c: string, throwOnFail = false) {
+    const match = c.match(/^([A-Z]+)$/);
+    if (throwOnFail && !match) {
+        throw new Error(`Invalid Col string : ${c}`);
+    }
+    return match;
 }
 
 
