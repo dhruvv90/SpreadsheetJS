@@ -154,14 +154,18 @@ export class Worksheet {
             this._state = data.sheetsInfo[this._idx].state;
         }
 
-        // Construct Columns and Add Cells to those columns
+        // Perform Cell Operations
         this.eachCell('rowWise', (cell)=>{
+            // Allocate cell to column
             let col = this.getColumn(cell.colNumber);
             if (!col) {
                 this.addColumns([new Column(cell.colString)]);
                 col = this.getColumn(cell.colNumber);
             }
             col.addCells([cell]);
+
+            // Populate cell values based on types
+            cell.updateValue(data.sharedStrings.ssItems);
         })
     }
 };

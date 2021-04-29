@@ -34,7 +34,7 @@ class XmlCell extends ParseableXmlUnit {
             if (!fullType) {
                 throw new Error(`Invalid Cell value type : ${t} for ${r}`);
             }
-            this._currentCell.type = fullType;
+            this._currentCell.type = t;
 
             const valueClass = this._typeToClassMapping[t];
             if (!valueClass) {
@@ -52,7 +52,7 @@ class XmlCell extends ParseableXmlUnit {
 
         const vNode = this._nodes['v'];
         if(vNode){
-            this._currentCell.value = vNode.value;
+            this._currentCell.parsedValue = vNode.value;
             this.cells.push(this._currentCell);
         }
     }
