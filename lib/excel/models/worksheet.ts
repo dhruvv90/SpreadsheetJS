@@ -3,6 +3,7 @@ import { SheetState } from "../constants";
 import { refToRC, isNumber, colToIdx, isString } from "../utils";
 import { Row } from "./row";
 import { Column } from "./column";
+import { Cell } from "./cell";
 
 
 export class Worksheet {
@@ -32,18 +33,9 @@ export class Worksheet {
     }
 
 
-    public addRows(r: Array<Row>) {
-        r.forEach((row) => this._rows[row.idx - 1] = row);
-    }
-
-
-    /**
-     * @param idx 1-based index
-     */
-    public getRow(idx: number) {
-        return this._rows[idx - 1];
-    }
-
+    //-----------------
+    //  Cell Operations
+    //-----------------
 
     public getCellByRef(r: string) {
         const { row, col } = refToRC(r);
@@ -62,6 +54,36 @@ export class Worksheet {
         }
     }
 
+    public eachCell(criteria: 'rowWise' | 'colWise', fn: (cell: Cell) => void) {
+        if (criteria === 'rowWise') {
+            this.eachRow(r => {
+                r.eachCell(cell => fn(cell))
+            });
+        }
+        else {
+            this.eachColumn(c => {
+                c.eachCell(cell => fn(cell))
+            });
+        }
+    }
+
+
+    //-----------------
+    //  Row Operations
+    //-----------------
+
+    public addRows(r: Array<Row>) {
+        r.forEach(row => this._rows[row.idx - 1] = row);
+    }
+
+
+    /**
+     * @param idx 1-based index
+     */
+    public getRow(idx: number) {
+        return this._rows[idx - 1];
+    }
+
 
     public rowCount() {
         return this._rows.length;
@@ -76,12 +98,14 @@ export class Worksheet {
     /**
      * @param fn (row, idx), where idx is 1-based index 
      */
-    public eachRow(fn: (row: Row, idx: number) => void) {
-        this._rows.forEach((row, idx) => {
-            fn(row, idx + 1);
-        });
+    public eachRow(fn: (row: Row) => void) {
+        this._rows.forEach(row => fn(row));
     }
 
+
+    //-----------------
+    //  Column Operations
+    //-----------------
 
     public addColumns(c: Array<Column>) {
         c.forEach((column) => this._columns[column.idx - 1] = column);
@@ -102,10 +126,46 @@ export class Worksheet {
         return this._columns[idx - 1];
     }
 
+    public columnCount() {
+        return this._columns.length;
+    }
+
+
+    public getLastColumn() {
+        return this._columns[this.columnCount() - 1];
+    }
+
+    /**
+     * @param fn (row, idx), where idx is 1-based index 
+     */
+    public eachColumn(fn: (col: Column) => void) {
+        this._columns.forEach((c) => fn(c));
+    }
+
+
+    //-----------------
+    //  Others
+    //-----------------
+
     public reconcile(data: Excel.wbInternalType) {
+        // Update data from SheetsInfo to this
         if (this._idx in data.sheetsInfo) {
             this._name = data.sheetsInfo[this._idx].name;
             this._state = data.sheetsInfo[this._idx].state;
         }
+
+        // Perform Cell Operations
+        this.eachCell('rowWise', (cell)=>{
+            // Allocate cell to column
+            let col = this.getColumn(cell.colNumber);
+            if (!col) {
+                this.addColumns([new Column(cell.colString)]);
+                col = this.getColumn(cell.colNumber);
+            }
+            col.addCells([cell]);
+
+            // Populate cell values based on types
+            cell.updateValue(data.sharedStrings.ssItems);
+        })
     }
 };

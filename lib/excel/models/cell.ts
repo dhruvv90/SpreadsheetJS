@@ -1,8 +1,10 @@
 import { CellDataType } from "../constants";
-import { colToIdx, refToRC } from "../utils";
+import { colToIdx, refToRC, stringToBool } from "../utils";
 
 
 export class Cell {
+
+    public parsedValue: any;
 
     private _value: any;
 
@@ -45,8 +47,45 @@ export class Cell {
     }
 
 
-    public set value(v: any) {
-        this._value = v;
+    public get value() {
+        if (!this._value) {
+            // Value will be available aftesr reconcilliation
+            throw new Error(`Value not computed for Cell : ${this._ref}`);
+        }
+        return this._value;
+    }
+
+    public updateValue(ss: Array<string>) {
+        if (this._value) {
+            return;
+        }
+
+        let val = this.parsedValue;
+        switch (this._dataType) {
+            case CellDataType.BOOLEAN:
+                val = stringToBool(val);
+                break;
+
+            case CellDataType.DATE:
+                val = new Date(val);
+                break;
+
+            case CellDataType.NUMBER:
+                val = Number(val);
+                break;
+
+            case CellDataType.SHARED_STRING:
+                val = ss[Number(this.parsedValue)];
+                break;
+
+            default:
+                break;
+        }
+        this._value = val;
+        
+        if (!this._value) {
+            throw new Error(`Unable to update Cell Value for Cell : ${this._ref}`);
+        }
     }
 
 
