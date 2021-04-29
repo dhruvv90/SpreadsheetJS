@@ -38,9 +38,7 @@ export class Column {
     /**
      * @param fn (cell, idx), where idx is 1-based index 
      */
-    public eachCell(fn: (cell: Cell, idx: number) => void) {
-        this._cells.forEach((cell) => {
-            fn(cell, cell.rowNumber);
-        });
+    public eachCell(fn: (cell: Cell) => void) {
+        this._cells.forEach(cell => fn(cell));
     }
 }
