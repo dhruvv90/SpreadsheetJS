@@ -34,6 +34,12 @@ export namespace Excel {
         constructor(options: any = {}) { }
 
 
+        public getWorkSheet(s: number | string) {
+            const res = this._worksheets.filter((sheet) => sheet.name === s || sheet.id == s);
+            return res[0];
+        }
+
+
         public async readFileAsync(path: string) {
             if (!fs.existsSync(path)) {
                 throw new Error(`File doesn't exist at path : ${path}`);

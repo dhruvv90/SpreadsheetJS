@@ -32,6 +32,10 @@ export class Worksheet {
         return this._name;
     }
 
+    public get id(){
+        return this._idx;
+    }
+
 
     //-----------------
     //  Cell Operations
