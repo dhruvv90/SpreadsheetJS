@@ -1,9 +1,9 @@
 # SpreadsheetJS [WIP]
-A Library specializing in reading Spreadsheet data, based in Typescript (4.2.3 - ES2020, Node : 10.14.0)
-* Focused on just reading, does not support writing.
-* Supported formats as of now : .xls , xlsx 
-* Uses Stream based reading and SAX based parsing internally.
-* Does not support extracting styles and formatting. Just gets your data right..
+A Library specializing in reading Spreadsheet data, based in Typescript
+* Focused on reading and parsing data. Supported formats : .xls , xlsx. 
+* Does not support writing. Does not support extracting styles and formatting. Just gets your data right.
+* Developed in TS - 4.2.3 (ES2020). Node version : 10.14.0. Created by reverse engineering a spreadsheet AND OpenXML/SpreadsheetML documentation
+* Internally Uses Stream based reading and SAX based parsing.
 
 
 # Aim of the project:
