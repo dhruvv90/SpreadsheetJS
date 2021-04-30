@@ -1,4 +1,4 @@
-# SpreadsheetJS [WIP - Not Production ready]
+# SpreadsheetJS [WIP]
 A Library specializing in reading Spreadsheet data, based in Typescript (4.2.3 - ES2020, Node : 10.14.0)
 * Focused on just reading, does not support writing.
 * Supported formats as of now : .xls , xlsx 
