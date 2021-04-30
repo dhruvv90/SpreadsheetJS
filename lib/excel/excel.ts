@@ -8,7 +8,7 @@ import { XmlApp, XmlCore, XmlSharedStrings, XmlWorkbook, XmlWorksheet } from './
 
 export namespace Excel {
 
-    export type wbInternalType = {
+    export type wbTempType = {
         sharedStrings: {
             ssItems: Array<string>;
             count: number
@@ -19,7 +19,7 @@ export namespace Excel {
 
     export class Workbook {
 
-        private _internal: wbInternalType = {
+        private _temp: wbTempType = {
             sharedStrings: {
                 ssItems: [],
                 count: 0
@@ -100,15 +100,15 @@ export namespace Excel {
                     case 'xl/sharedStrings.xml':
                         const xmlSharedStrings = new XmlSharedStrings();
                         await xmlSharedStrings.parseStream(stream);
-                        this._internal.sharedStrings.ssItems = xmlSharedStrings.ssItems;
-                        this._internal.sharedStrings.count = xmlSharedStrings.count;
+                        this._temp.sharedStrings.ssItems = xmlSharedStrings.ssItems;
+                        this._temp.sharedStrings.count = xmlSharedStrings.count;
                         break;
 
                     case '/xl/workbook.xml':
                     case 'xl/workbook.xml':
                         const xmlWorkbook = new XmlWorkbook();
                         await xmlWorkbook.parseStream(stream);
-                        this._internal.sheetsInfo = xmlWorkbook.sheetsInfo;
+                        this._temp.sheetsInfo = xmlWorkbook.sheetsInfo;
                         break;
 
                     default:
@@ -131,8 +131,8 @@ export namespace Excel {
                 throw new Error('Invalid Call to _reconcile. This operation is only allowed after parsing');
             }
 
-            this._worksheets.forEach((sheet) => sheet.reconcile(this._internal));
-            delete this._internal;
+            this._worksheets.forEach((sheet) => sheet.reconcile(this._temp));
+            delete this._temp;
         }
     }
 }

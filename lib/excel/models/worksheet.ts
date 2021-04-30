@@ -151,7 +151,7 @@ export class Worksheet {
     //  Others
     //-----------------
 
-    public reconcile(data: Excel.wbInternalType) {
+    public reconcile(data: Excel.wbTempType) {
         // Update data from SheetsInfo to this
         if (this._idx in data.sheetsInfo) {
             this._name = data.sheetsInfo[this._idx].name;
