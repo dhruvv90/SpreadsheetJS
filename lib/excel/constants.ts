@@ -26,6 +26,14 @@ export type SheetInfo = {
     state: SheetState;
 }
 
+export type wbTempType = {
+    sharedStrings: {
+        ssItems: Array<string>;
+        count: number
+    },
+
+    sheetsInfo: KeyValue<SheetInfo>;
+}
 
 
 //-----------------

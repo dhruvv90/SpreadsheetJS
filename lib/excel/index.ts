@@ -2,20 +2,12 @@ import * as fs from 'fs';
 import * as jsZip from 'jszip';
 import { Readable, PassThrough } from 'readable-stream';
 import { Worksheet } from './models';
-import { KeyValue, KeyValueGeneric, SheetInfo } from './constants';
+import { KeyValueGeneric, wbTempType } from './constants';
 import { XmlApp, XmlCore, XmlSharedStrings, XmlWorkbook, XmlWorksheet } from './xml';
 
 
 export namespace Excel {
 
-    export type wbTempType = {
-        sharedStrings: {
-            ssItems: Array<string>;
-            count: number
-        },
-
-        sheetsInfo: KeyValue<SheetInfo>;
-    }
 
     export class Workbook {
 
@@ -28,8 +20,11 @@ export namespace Excel {
         };
 
         private _worksheets: Array<Worksheet> = [];
+        
         private _isParsingComplete: boolean = false;
+
         private _meta: KeyValueGeneric = {};
+
 
         constructor(options: any = {}) { }
 
@@ -125,6 +120,7 @@ export namespace Excel {
             this._reconcile();
         }
 
+        
         /** Post processing after parsing is complete */
         private _reconcile() {
             if (!this._isParsingComplete) {

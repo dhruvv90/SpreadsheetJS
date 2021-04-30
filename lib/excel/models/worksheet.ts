@@ -1,5 +1,4 @@
-import { Excel } from "../excel";
-import { SheetState } from "../constants";
+import { SheetState, wbTempType } from "../constants";
 import { refToRC, isNumber, colToIdx, isString } from "../utils";
 import { Row } from "./row";
 import { Column } from "./column";
@@ -151,7 +150,7 @@ export class Worksheet {
     //  Others
     //-----------------
 
-    public reconcile(data: Excel.wbTempType) {
+    public reconcile(data: wbTempType) {
         // Update data from SheetsInfo to this
         if (this._idx in data.sheetsInfo) {
             this._name = data.sheetsInfo[this._idx].name;

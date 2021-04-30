@@ -1,3 +1,3 @@
 
-export * from './lib/excel/excel';
+export * from './lib/excel';
 
