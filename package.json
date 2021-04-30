@@ -4,6 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"dependencies": {
+		"@fast-csv/parse": "^4.3.6",
 		"jszip": "^3.6.0",
 		"readable-stream": "^3.6.0",
 		"saxes": "^5.0.1"
