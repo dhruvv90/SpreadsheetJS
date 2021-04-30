@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as jsZip from 'jszip';
 import { Readable, PassThrough } from 'readable-stream';
-import { Worksheet } from './models';
-import { KeyValueGeneric, wbTempType } from './constants';
+import { Worksheet } from '../models';
+import { KeyValueGeneric, wbTempType } from '../constants';
 import { XmlApp, XmlCore, XmlSharedStrings, XmlWorkbook, XmlWorksheet } from './xml';
 
 
