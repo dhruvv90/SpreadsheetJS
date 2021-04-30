@@ -171,4 +171,4 @@ export class Worksheet {
             cell.updateValue(data.sharedStrings.ssItems);
         })
     }
-};
+}

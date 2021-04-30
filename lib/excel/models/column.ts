@@ -1,4 +1,4 @@
-import { colToIdx, isNumber, isString } from "../utils";
+import { colToIdx } from "../utils";
 import { Cell } from "./cell";
 
 

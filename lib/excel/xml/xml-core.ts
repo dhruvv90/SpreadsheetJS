@@ -1,4 +1,4 @@
-import { KeyValueGeneric, XMLNodeType } from '../constants';
+import { KeyValueGeneric } from '../constants';
 import { ParseableXmlUnit, XmlUnitDate, XmlUnitString } from './base';
 
 export class XmlCore extends ParseableXmlUnit {

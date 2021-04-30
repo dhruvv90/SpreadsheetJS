@@ -1,4 +1,4 @@
-import { KeyValue, SheetInfo, SheetStateInv, XMLNodeType } from "../constants";
+import { KeyValue, SheetInfo, SheetStateInv } from "../constants";
 import { ParseableXmlUnit } from "./base";
 
 

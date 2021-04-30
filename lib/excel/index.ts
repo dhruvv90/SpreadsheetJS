@@ -21,12 +21,12 @@ export namespace Excel {
 
         private _worksheets: Array<Worksheet> = [];
         
-        private _isParsingComplete: boolean = false;
+        private _isParsingComplete = false;
 
         private _meta: KeyValueGeneric = {};
 
 
-        constructor(options: any = {}) { }
+        constructor() { }
 
 
         public getWorkSheet(s: number | string) {
@@ -64,7 +64,7 @@ export namespace Excel {
             for (const entry of Object.values(zip.files)) {
 
                 const content = await entry.async('string');
-                let stream = new PassThrough({ readableObjectMode: true, writableObjectMode: true });
+                const stream = new PassThrough({ readableObjectMode: true, writableObjectMode: true });
 
                 // Default highWaterMark is 16 KB on most environments. 
                 // Defining 10KB here to avoid backpressure in case of large XMLs.
@@ -76,7 +76,7 @@ export namespace Excel {
 
                 switch (entry.name) {
                     case '/docProps/app.xml':
-                    case 'docProps/app.xml':
+                    case 'docProps/app.xml': 
                         const xmlApp = new XmlApp();
                         await xmlApp.parseStream(stream);
                         Object.assign(this._meta, {

@@ -6,7 +6,7 @@ import { Readable } from 'readable-stream';
 /**
  * can process these forms - case insensitive :  'true', 't'. All others/undef is false
  */
-export const stringToBool = function (s: string, undefIsFalse = false): boolean {
+export const stringToBool = function (s: string): boolean {
     if (!s) return false;
 
     const truthyList = ['true', 't'];

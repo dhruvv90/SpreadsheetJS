@@ -1,4 +1,3 @@
-import { KeyValueGeneric, XMLNodeType } from '../constants';
 import { XmlUnitString, ParseableXmlUnit } from './base';
 
 
