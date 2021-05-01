@@ -8,11 +8,9 @@ export class Row {
     /** 1-based index */
     public idx: number;
 
-
     constructor(idx: number) {
         this.idx = idx;
     }
-
 
     public addCells(c: Array<Cell>) {
         c.forEach((cell) => {
@@ -22,7 +20,6 @@ export class Row {
             this._cells[cell.colNumber - 1] = cell;
         })
     }
-
 
     /**
      * @param i 1-based index OR column letter (eg. A)
@@ -37,7 +34,6 @@ export class Row {
         }
         return this._cells[idx - 1];
     }
-
 
     /**
      * @param fn (cell, idx), where idx is 1-based index 

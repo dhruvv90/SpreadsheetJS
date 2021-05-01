@@ -17,7 +17,6 @@ class XmlSheetInfo extends ParseableXmlUnit {
         if (!state) {
             throw new Error(`Unable to parse sheet state : ${this.attributes.state} for sheet : ${sheetId}`);
         }
-
         this.sheetsInfo[sheetId] = {
             sheetId,
             state,

@@ -16,7 +16,6 @@ class XmlCell extends ParseableXmlUnit {
         [CellDataType.STRING]: XmlUnitString,
     };
 
-
     constructor() {
         super('c');
         this._nodes['f'] = new XmlUnitString('f');
@@ -25,7 +24,6 @@ class XmlCell extends ParseableXmlUnit {
     protected onOpen() {
         const r = this.attributes.r;
         const t = this.attributes.t;
-
         this._currentCell = new Cell(r);
 
         // t will be undefined for blank cell
@@ -42,14 +40,12 @@ class XmlCell extends ParseableXmlUnit {
             }
             this._nodes['v'] = new valueClass('v');
         }
-
         this._nodes['f'] = new XmlUnitString('f');
     }
 
     protected onClose(): void {
         const fNode = this._nodes['f'];
         this._currentCell.formula = fNode.value;
-
         const vNode = this._nodes['v'];
         if(vNode){
             this._currentCell.parsedValue = vNode.value;
@@ -109,7 +105,6 @@ class XmlSheetData extends ParseableXmlUnit {
 export class XmlWorksheet extends ParseableXmlUnit {
 
     public worksheet: Worksheet;
-
 
     constructor(id: string) {
         super('worksheet');

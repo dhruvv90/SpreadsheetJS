@@ -10,12 +10,10 @@ export class Column {
 
     public strIdx: string;
 
-
     constructor(strIdx: string) {
         this.idx = colToIdx(strIdx);
         this.strIdx = strIdx;
     }
-
 
     public addCells(c: Array<Cell>) {
         c.forEach((cell) => {
@@ -26,14 +24,12 @@ export class Column {
         })
     }
 
-
     /**
      * @param i 1-based index
      */
     public getCell(i: number) {
         return this._cells[i - 1];
     }
-
 
     /**
      * @param fn (cell, idx), where idx is 1-based index 

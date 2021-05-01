@@ -8,11 +8,9 @@ import { Readable } from 'readable-stream';
  */
 export const stringToBool = function (s: string): boolean {
     if (!s) return false;
-
     const truthyList = ['true', 't'];
     const comparator = s.toLowerCase();
     if (truthyList.includes(comparator)) return true;
-
     return false;
 }
 

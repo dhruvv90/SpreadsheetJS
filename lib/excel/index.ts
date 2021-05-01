@@ -8,7 +8,6 @@ import { XmlApp, XmlCore, XmlSharedStrings, XmlWorkbook, XmlWorksheet } from './
 
 export namespace Excel {
 
-
     export class Workbook {
 
         private _temp: wbTempType = {
@@ -25,21 +24,17 @@ export namespace Excel {
 
         private _meta: KeyValueGeneric = {};
 
-
         constructor() { }
-
 
         public getWorkSheet(s: number | string) {
             const res = this._worksheets.filter((sheet) => sheet.name === s || sheet.id == s);
             return res[0];
         }
 
-
         public async readFileAsync(path: string) {
             if (!fs.existsSync(path)) {
                 throw new Error(`File doesn't exist at path : ${path}`);
             }
-
             const stream = fs.createReadStream(path);
             try {
                 await this._read(stream);
@@ -52,15 +47,12 @@ export namespace Excel {
             }
         }
 
-
         private async _read(stream: Readable) {
-
             const chunks = [];
             for await (const chunk of stream) {
                 chunks.push(chunk);
             }
             const zip = await jsZip.loadAsync(Buffer.concat(chunks));
-
             for (const entry of Object.values(zip.files)) {
 
                 const content = await entry.async('string');
@@ -119,14 +111,12 @@ export namespace Excel {
             this._isParsingComplete = true;
             this._reconcile();
         }
-
         
         /** Post processing after parsing is complete */
         private _reconcile() {
             if (!this._isParsingComplete) {
                 throw new Error('Invalid Call to _reconcile. This operation is only allowed after parsing');
             }
-
             this._worksheets.forEach((sheet) => sheet.reconcile(this._temp));
             delete this._temp;
         }

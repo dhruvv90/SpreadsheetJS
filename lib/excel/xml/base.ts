@@ -9,10 +9,8 @@ export abstract class ParseableXmlUnit {
     /** Stores child nodes to traverse and extract data from */
     protected _nodes: KeyValue<ParseableXmlUnit>;
 
-
     /** Represents current Parser while traversing XML  */
     protected _parser: ParseableXmlUnit;
-
 
     /** Stores data extracted from self + child nodes */
     private _data: XmlDataType;
@@ -41,11 +39,9 @@ export abstract class ParseableXmlUnit {
         return this._tag;
     }
 
-
     constructor(tag: string) {
         assert(tag, `Illegal ParseableXmlUnit construction. 'tag' must be present`);
         this._tag = tag;
-
         this._nodes = {};
         this._data = {
             attributes: {}
@@ -65,13 +61,11 @@ export abstract class ParseableXmlUnit {
     protected abstract onClose(): void;
 
 
-
     public parseOpen(node: XMLNodeType) {
         if (node.name === this._tag) {
             this._data.attributes = node.attributes;
             this.onOpen();
         }
-
         if (this._parser) {
             this._parser.parseOpen(node);
         }
@@ -85,11 +79,9 @@ export abstract class ParseableXmlUnit {
         if (this._parser) {
             this._parser.parseClose(node);
         }
-
         if (node.name in this._nodes) {
             this._parser = undefined;
         }
-
         if (node.name === this._tag) {
             this.onClose();
         }
