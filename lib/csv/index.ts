@@ -10,6 +10,14 @@ export namespace CSV {
         private _rows: Array<Array<any>> = [];
         private _columns: Array<Array<any>> = [];
 
+        public get rows(){
+            return this._rows;
+        }
+
+        public get columns(){
+            return this._columns;
+        }
+
         public async readFileAsync(path: string, options: CsvReaderOptions = {}) {
             if (!fs.existsSync(path)) {
                 throw new Error(`File doesn't exist at path : ${path}`);
