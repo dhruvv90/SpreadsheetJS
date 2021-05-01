@@ -4,7 +4,6 @@ import { CsvReaderOptions } from '../constants';
 
 
 export namespace CSV {
-
     export class FileReader {
 
         private _rows: Array<Array<any>> = [];
@@ -14,7 +13,6 @@ export namespace CSV {
             if (!fs.existsSync(path)) {
                 throw new Error(`File doesn't exist at path : ${path}`);
             }
-
             const stream = fs.createReadStream(path);
             try {
                 await this._read(stream, options);
@@ -61,5 +59,4 @@ export namespace CSV {
             this._columns = columns;
         }
     }
-
 }
