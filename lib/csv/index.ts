@@ -6,7 +6,7 @@ import { CsvReaderOptions } from '../constants';
 export namespace CSV {
     
     export class FileReader {
-        
+
         private _rows: Array<Array<any>> = [];
         private _columns: Array<Array<any>> = [];
 
@@ -29,6 +29,7 @@ export namespace CSV {
         private _read(stream: any, options: CsvReaderOptions = {}) {
             return new Promise((resolve, reject) => {
                 parser.parseStream(stream, options.parserOptions)
+                    .on('headers', (headers)=> this._processData(headers))
                     .on('data', (data) => this._processData(data))
                     .on('error', reject)
                     .on('end', _ => {
