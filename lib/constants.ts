@@ -1,4 +1,5 @@
 import { inverseMap } from "./utils";
+import { ParserOptionsArgs } from '@fast-csv/parse';
 
 
 //-----------------
@@ -31,8 +32,11 @@ export type wbTempType = {
         ssItems: Array<string>;
         count: number
     },
-
     sheetsInfo: KeyValue<SheetInfo>;
+}
+
+export type CsvReaderOptions = {
+    parserOptions?: ParserOptionsArgs;
 }
 
 
