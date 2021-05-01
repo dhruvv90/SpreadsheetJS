@@ -4,8 +4,9 @@ import { CsvReaderOptions } from '../constants';
 
 
 export namespace CSV {
+    
     export class FileReader {
-
+        
         private _rows: Array<Array<any>> = [];
         private _columns: Array<Array<any>> = [];
 
