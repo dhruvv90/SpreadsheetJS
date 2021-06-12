@@ -7,12 +7,12 @@ A Library specializing in reading Spreadsheet data from files, based in Typescri
 
 
 # Aim
-* To create a specialized library for just reading spreadsheet data (different formats).
-* To make it highly customized , faster, light-weight and hightly optimized compared to other alternatives.
+* To support reading of different formats - ods/odf/xlsx/csv
+* To make it faster, bug-free, light-weight and more optimized so that it can be compared to other alternatives.
 
 
 # Contributions are welcome
-* If your interest matches the aim of this project or if you want to fix any bugs, feel free to contribute.
+* If you want to fix any bugs, or extend the library ( or help with documentation), feel free to contribute.
 * If you want to contribute, please open an issue with a short description. Also it's advisable to go through current work in pipeline.
 * It is recommended to add Unit tests related to your feature/bug
 
